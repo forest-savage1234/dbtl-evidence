@@ -46,6 +46,8 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind == "literature_evidence":
+        return []
     if kind in {"trajectory", "process_policy"}:
         from .process import process_dependencies
         return process_dependencies(kind, payload)
@@ -84,6 +86,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind == "literature_evidence":
+        from .handoff import validate_handoff
+        validate_handoff(db, payload, deps, artifacts)
     if kind in {"trajectory", "process_policy"}:
         from .process import validate_process
         validate_process(db, kind, payload, deps, artifacts)

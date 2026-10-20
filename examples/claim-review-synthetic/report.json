@@ -1,0 +1,106 @@
+{
+  "schema": "claim-review/1",
+  "toolVersion": "0.3.2-browser",
+  "spec": {
+    "title": "SYNTHETIC product/biomass ratio, not substrate yield",
+    "filename": "source.csv",
+    "sheet": "Table",
+    "recordKind": "synthetic",
+    "op": "divide",
+    "outputUnit": "g/g",
+    "dp": 2,
+    "reported": "0.5",
+    "expectedHash": "fdde8406ecfbd10d47d385e2daaf754e4c51f90671267d8c3628e2ddfe835c3d",
+    "inputs": [
+      {
+        "cell": "A2",
+        "unit": "g",
+        "headerCell": "A1",
+        "headerText": "product_g"
+      },
+      {
+        "cell": "B2",
+        "unit": "g",
+        "headerCell": "B1",
+        "headerText": "biomass_g"
+      }
+    ],
+    "requireConditions": false,
+    "conditions": [],
+    "citation": "SYNTHETIC fixture; not a published measurement",
+    "publicationVersion": "synthetic:1",
+    "measurementGap": "Instrument-to-value chain is not established.",
+    "contextGap": "Physical sample identity is not established.",
+    "versionNote": "SYNTHETIC fixture, not a publication-history review."
+  },
+  "digest": "fdde8406ecfbd10d47d385e2daaf754e4c51f90671267d8c3628e2ddfe835c3d",
+  "sourceWarnings": [],
+  "values": [
+    "10",
+    "20"
+  ],
+  "exact": "1/2",
+  "rounded": "0.50",
+  "error": null,
+  "numericalStatus": "SOURCE_REPLAY",
+  "overallStatus": "PARTIAL_SUPPORT",
+  "conditionStatus": "NOT_DECLARED",
+  "conditionTrace": [],
+  "headerTrace": [
+    {
+      "label": "input 1",
+      "cell": "A1",
+      "resolvedCell": "A1",
+      "mergedRange": null,
+      "observed": "product_g",
+      "expected": "product_g"
+    },
+    {
+      "label": "input 2",
+      "cell": "B1",
+      "resolvedCell": "B1",
+      "mergedRange": null,
+      "observed": "biomass_g",
+      "expected": "biomass_g"
+    }
+  ],
+  "replicates": [],
+  "checks": [
+    {
+      "name": "Retained source",
+      "status": "supported",
+      "detail": "SHA-256 matches the declared fingerprint."
+    },
+    {
+      "name": "Source locations",
+      "status": "supported",
+      "detail": "Read Table!A2 and Table!B2."
+    },
+    {
+      "name": "Declared arithmetic",
+      "status": "supported",
+      "detail": "0.50 g/g at 2 decimal places."
+    },
+    {
+      "name": "Reported value",
+      "status": "supported",
+      "detail": "Replay matches the declared reported value at reporting precision."
+    },
+    {
+      "name": "Measurement history",
+      "status": "open",
+      "detail": "Instrument-to-value chain is not established."
+    },
+    {
+      "name": "Experimental context",
+      "status": "open",
+      "detail": "Physical sample identity is not established."
+    },
+    {
+      "name": "Publication history",
+      "status": "open",
+      "detail": "SYNTHETIC fixture, not a publication-history review."
+    }
+  ],
+  "boundary": "Checks cover selected observations, declared condition bindings, arithmetic, sample SD, SEM, units and reporting precision. They do not establish complete conditions, biological independence, valid pooling, measurement provenance, or scientific validity. Source interpretation and requirement completeness remain curator-dependent."
+}

@@ -1,0 +1,9 @@
+{
+  "kind": "synthetic producer-core execution",
+  "snapshot_sha256": "89fd6fe7ebb04640abfbe50889e75fc803e21ee8cadafbdd72c7beb67d8fb874",
+  "tool_version": "0.3.2-browser",
+  "node": "v24.19.0",
+  "source_sha256": "fdde8406ecfbd10d47d385e2daaf754e4c51f90671267d8c3628e2ddfe835c3d",
+  "report_sha256": "f8109dc712358d6108c3f8167c90d8f3d85e72a13295776f2e70a8c83dfc286f",
+  "boundary": "Producer core invoked with the same report payload as export. No browser UI, project import, author authentication or real-study validation tested."
+}
