@@ -1,0 +1,41 @@
+{
+  "data": "SYNTHETIC ONLY; every supporting review is invented",
+  "initial_packet": "v_8e3ce08493d44a51bd5145d723c35e37",
+  "reassessed_packet": "v_de2a6c1785ef4152bd2889056ffba621",
+  "initial_top": "demo2:strain:A",
+  "reassessed_top": "demo2:strain:C",
+  "pool_growth_alert": true,
+  "added_candidates": [
+    "demo2:measurement:C1",
+    "demo2:measurement:C2"
+  ],
+  "acknowledgement_does_not_refresh": true,
+  "uncertain_access_reopens": true,
+  "historical_replay": {
+    "ok": true,
+    "packet_version": "v_8e3ce08493d44a51bd5145d723c35e37",
+    "historical_state": "ready_for_scoped_human_review",
+    "result_sha256": "641c26db0a78e888b5dd11840452b4f0ae07bd649897f9d98c12706fe62f6443",
+    "meaning": "Historical software reconstruction only; does not establish current eligibility or scientific truth."
+  },
+  "reassessed_replay": {
+    "ok": true,
+    "packet_version": "v_de2a6c1785ef4152bd2889056ffba621",
+    "historical_state": "ready_for_scoped_human_review",
+    "result_sha256": "04c18aa90871546de4c5a7aeb9c8fbced793c21bfc28c46d34d830e1ea0fd45c",
+    "meaning": "Historical software reconstruction only; does not establish current eligibility or scientific truth."
+  },
+  "audit": {
+    "ok": true,
+    "meaning": "Local registry/byte consistency; not scientific validity or authenticated provenance",
+    "version_count": 111,
+    "artifact_count": 42,
+    "unreferenced_artifacts": 0,
+    "datasets_replayed": 0,
+    "datasets_replay_blocked": 0,
+    "packets_replayed": 2,
+    "packets_replay_blocked": 0,
+    "warnings": [],
+    "errors": []
+  }
+}

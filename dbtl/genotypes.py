@@ -1,5 +1,4 @@
 """Material- and time-scoped genotype observations, never whole-genome verification."""
-import json
 from datetime import datetime, timezone
 from decimal import Decimal
 
@@ -7,6 +6,7 @@ from .core import IntegrityError, identifier
 from .domain import number
 from .graph import verify_closure, outdated_sources
 from .assessments import summary as assessment_summary
+from .contracts import read_json
 
 
 def utc(value):
@@ -26,8 +26,7 @@ def genotype_dependencies(p):
 def calls(db, source_digest):
     path = db.objects.verify(source_digest)
     if path.stat().st_size > 1024*1024: raise IntegrityError("Genotype calls exceed 1 MiB")
-    try: data = json.loads(path.read_text(encoding="utf-8"))
-    except (UnicodeError, ValueError) as exc: raise IntegrityError("Structured genotype calls required") from exc
+    data = read_json(db, source_digest)
     if not isinstance(data, dict) or set(data) != {"schema", "calls"} or data["schema"] != "scoped-genotype-calls/1":
         raise IntegrityError("Unsupported genotype call format; arbitrary notes are not calls")
     rows = data["calls"]
@@ -82,9 +81,10 @@ def evaluate(db, measurement_version, observation_versions, *, required_regions,
         if r["kind"] != "genotype_observation": raise IntegrityError("Expected genotype observation")
         verify_closure(db, version); p = r["payload"]; used.add(version)
         validate_genotype(db, p, r["dependencies"], r["artifacts"])
-        age = Decimal(str((now-utc(p["observed_at"])).total_seconds()))/Decimal(3600)
+        delta = now-utc(p["observed_at"])
+        age_seconds = Decimal(delta.days*86400+delta.seconds)+Decimal(delta.microseconds)/Decimal(1000000)
         reason = ("wrong_material" if p["material_version"] not in material[1:] or p["strain_version"] != strain else
-                  "scope_mismatch" if p["scope"] != required_scope else "observation_outside_window" if age < 0 or age > age_limit else
+                  "scope_mismatch" if p["scope"] != required_scope else "observation_outside_window" if age_seconds < 0 or age_seconds > age_limit*3600 else
                   "generation_too_early" if p["generation"] < minimum_generation else "superseded_evidence" if outdated_sources(db, version) else None)
         if reason: issues.append({"version": version, "reason": reason}); continue
         review = assessment_summary(db, version)

@@ -47,7 +47,7 @@ KINDS = frozenset({"design", "strain", "activity", "protocol", "culture", "sampl
                    "dataset", "decision", "review", "model", "assessment", "pool", "pool_snapshot",
                    "availability", "watch", "watch_review", "quantity", "quantity_result",
                    "experimental_unit", "unit_assignment", "genotype_observation", "assay_profile", "uncertainty_result",
-                   "trajectory", "process_policy", "literature_evidence"})
+                   "trajectory", "process_policy", "literature_evidence", "packet_policy", "packet", "advance"})
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);
@@ -224,12 +224,23 @@ class Instrument:
 
     def validate(self, kind: str, payload: dict, deps: list[dict], artifacts: list[str], entity_id: str):
         from .domain import validate
-        validate(self, kind, payload, deps, artifacts, entity_id)
+        try:
+            validate(self, kind, payload, deps, artifacts, entity_id)
+        except IntegrityError:
+            raise
+        except (KeyError, TypeError, AttributeError, ValueError, RecursionError) as exc:
+            raise IntegrityError("Malformed "+kind+" contract") from exc
 
     def capture(self, entity_id: str, kind: str, payload: dict, **kwargs) -> dict:
         """Populate known typed references without inferring biological metadata."""
         from .domain import dependencies
-        return self.put(entity_id, kind, payload, dependencies=dependencies(kind, payload), **kwargs)
+        try:
+            refs = dependencies(kind, payload)
+        except IntegrityError:
+            raise
+        except (KeyError, TypeError, AttributeError, ValueError, RecursionError) as exc:
+            raise IntegrityError("Malformed "+str(kind)+" dependencies") from exc
+        return self.put(entity_id, kind, payload, dependencies=refs, **kwargs)
 
     def verify(self) -> dict:
         from .audit import audit

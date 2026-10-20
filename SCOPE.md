@@ -36,3 +36,9 @@ the entire database and hashes. The local filesystem is a trusted boundary.
 
 The numeric versions are bounded milestones. Passing them does not establish
 lab deployment readiness or commercial superiority.
+
+## v2.0 extension
+
+The reference now implements the ten increments in README.md and docs/releases/v1.1.md through v2.0.md. The primary `packet`/`advance` workflow enforces bounded review requirements; legacy `freeze`/`decide` retain their narrower descriptive scope. Typed ratios are a separate arithmetic utility and do not extend packet ranking beyond calibrated titer. Separate scientific assessments remain reviewer assertions.
+
+See docs/V2_WORKFLOW.md for exact contracts and docs/V2_VALIDATION.md for completed versus open gates. The field protocol has been prepared, not executed. Industrial efficacy, real sample authenticity, whole-genome validation, complete uncertainty, process equivalence, background discovery and production qualification remain unestablished. A fixed genotype as-of horizon does not advance automatically with wall-clock time. Claim Review remains unchanged; only the bounded report/source receiver is implemented here.

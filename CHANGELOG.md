@@ -14,3 +14,14 @@
 All releases are local research milestones. The final version does not denote
 enterprise deployment readiness, validated biological results, or universal
 resolution of the original problem.
+
+- **v1.1** — Six separate, evidence-linked reviewer assessment dimensions.
+- **v1.2** — Bounded evidence-pool predicates and historical snapshots.
+- **v1.3** — New membership/availability changes, watches and scoped acknowledgment.
+- **v1.4** — Source-bound quantity meaning, paired versus pooled ratios.
+- **v1.5** — Physical experimental units and separately assessed independence.
+- **v1.6** — Material/time/generation/region-scoped genotype observations.
+- **v1.7** — Scoped assay evidence and conditional first-order covariance propagation.
+- **v1.8** — Realized process windows, clocks, gaps and observed-point limits.
+- **v1.9** — One-way Claim Review report/source receipt without scientific promotion.
+- **v2.0** — Frozen scoped decision packets, current evidence reconciliation, explicit human selection, CLI, integrated synthetic campaign and recovery.

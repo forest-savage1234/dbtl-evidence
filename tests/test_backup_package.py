@@ -87,3 +87,8 @@ class PackageTests(unittest.TestCase):
             result = subprocess.run([sys.executable, "-m", "dbtl", "demo", "--output", str(Path(temp) / "demo")], cwd=extracted, capture_output=True, text=True, timeout=30)
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue(json.loads(result.stdout)["audit"]["ok"])
+            scoped = subprocess.run([sys.executable,"-m","dbtl","demo2","--output",str(Path(temp)/"scoped-demo")],cwd=extracted,capture_output=True,text=True,timeout=60)
+            self.assertEqual(scoped.returncode,0,scoped.stderr)
+            data=json.loads(scoped.stdout)
+            self.assertTrue(data["pool_growth_alert"] and data["historical_replay_ok"] and data["audit"]["ok"])
+            self.assertEqual(data["reassessed_top"],"demo2:strain:C")

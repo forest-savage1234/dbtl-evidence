@@ -4,7 +4,7 @@ from .graph import outdated_sources, verify_closure
 from .pools import compute_snapshot, replay_snapshot
 
 REFS = {"availability": {"measurement_version": ("measurement", {"measurement"})},
-        "watch": {"target_version": ("target", {"dataset", "decision", "model"}),
+        "watch": {"target_version": ("target", {"dataset", "decision", "model", "packet", "advance"}),
                   "snapshot_version": ("snapshot", {"pool_snapshot"})},
         "watch_review": {"watch_version": ("watch", {"watch"})}}
 
@@ -24,19 +24,14 @@ def validate_watch_record(db, kind, payload, deps):
     if kind == "availability":
         if set(payload) != {"measurement_version", "state", "category", "basis"} or payload["state"] not in {"available", "withdrawn", "inaccessible"} or payload["category"] not in {"bibliographic", "measurement", "access", "unknown"}:
             raise IntegrityError("Invalid availability notice")
-        measurement_entity = db.get(payload["measurement_version"])["entity_id"]
-        for record in db.versions("availability", heads_only=True):
-            if db.get(record["payload"]["measurement_version"])["entity_id"] == measurement_entity:
-                # A single notice entity avoids contradictory last-writer ordering.
-                if record["payload"]["measurement_version"] != payload["measurement_version"]:
-                    continue
     elif kind == "watch":
         if set(payload) != {"target_version", "snapshot_version", "basis"}: raise IntegrityError("Malformed watch")
         replay_snapshot(db, payload["snapshot_version"])
     else:
         if set(payload) != {"watch_version", "fingerprint", "disposition", "basis"} or payload["disposition"] not in {"retain_historical", "retire"}:
             raise IntegrityError("Review cannot make changed evidence current")
-        if payload["fingerprint"] != status(db,payload["watch_version"])["fingerprint"]:
+        current=status(db,payload["watch_version"])
+        if not current["requires_reassessment"] or payload["fingerprint"] != current["fingerprint"]:
             raise IntegrityError("Pool changed again; review current state")
 
 
@@ -64,14 +59,20 @@ def status(db, watch_version):
         stale=outdated_sources(db,p["target_version"])
         target=db.get(p["target_version"])
         superseded_target=db.latest(target["entity_id"])["id"]!=target["id"]
-        pending=bool(any(delta.values()) or stale or superseded_target)
-        fingerprint=digest({"watch":watch_version,"delta":delta,"stale":stale,"target_superseded":superseded_target,
-                            "relevant_versions":{id:new[id]["measurement_version"] for id in sorted(after)}})
+        packet_state=None
+        if target["kind"] in {"packet","advance"}:
+            from .packets import status as packet_status
+            packet_state=packet_status(db,target["id"] if target["kind"]=="packet" else target["payload"]["packet_version"])
+        pending=bool(any(delta.values()) or stale or superseded_target or packet_state and packet_state["requires_reassessment"])
+        fingerprint_input={"watch":watch_version,"delta":delta,"stale":stale,"target_superseded":superseded_target,
+                           "relevant_versions":{id:new[id]["measurement_version"] for id in sorted(after)}}
+        if packet_state:fingerprint_input["packet_fingerprint"]=packet_state["fingerprint"]
+        fingerprint=digest(fingerprint_input)
         reviews=[r["id"] for r in db.versions("watch_review",heads_only=True) if r["payload"]["watch_version"]==watch_version and r["payload"]["fingerprint"]==fingerprint]
         return {"watch_version":watch_version,"target_version":target["id"],"watermark":current["watermark"],
                 "state":"pool_eligibility_unknown" if delta["uncertain"] else "reassessment_pending" if pending else "current_for_registered_pool",
                 "requires_reassessment":pending,"delta":delta,"stale_dependencies":stale,"target_superseded":superseded_target,
-                "fingerprint":fingerprint,"acknowledged":bool(reviews),"review_versions":reviews,
+                "fingerprint":fingerprint,"acknowledged":bool(reviews),"review_versions":reviews,"packet_status":packet_state,
                 "coverage":current["coverage"],"meaning":"Review request, not automatic rejection or authorization."}
 
 

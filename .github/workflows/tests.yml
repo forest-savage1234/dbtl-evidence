@@ -27,3 +27,5 @@ jobs:
         run: python -m unittest discover -v
       - name: Run synthetic correction demonstration
         run: python -m dbtl demo --output "${RUNNER_TEMP}/dbtl-demonstration"
+      - name: Run scoped evidence and evolving-pool campaign
+        run: python -m dbtl demo2 --output "${RUNNER_TEMP}/dbtl-scoped-demonstration"

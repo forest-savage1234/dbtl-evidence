@@ -133,3 +133,7 @@ The trusted boundary is a local user's filesystem. Hashes and SQL triggers are
 consistency mechanisms, not signed chain-of-custody, authenticated authorship,
 protection from a privileged administrator, an offsite backup strategy, or
 regulatory compliance. There is no multi-tenant access control or network API.
+
+## Additive v2 contracts
+
+The legacy assay contract above remains supported. New kinds use closed local contracts and typed references in their corresponding modules; the integrated contract and status meanings are documented in [V2_WORKFLOW.md](V2_WORKFLOW.md). SQLite storage schema remains 1; additive record types do not rewrite prior data. New decisions require `packet` and `advance` to enforce v2 gates. Legacy records remain legacy scope.

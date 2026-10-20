@@ -13,7 +13,7 @@ def normalized(sql):
 
 def audit(db):
     errors, warnings, records, artifact_keys = [], [], {}, set()
-    replayed, replay_blocked = 0, 0
+    replayed, replay_blocked, packets_replayed, packets_blocked = 0, 0, 0, 0
     try:
         quick = [r[0] for r in db.conn.execute("PRAGMA quick_check")]
         if quick != ["ok"]:
@@ -76,6 +76,31 @@ def audit(db):
                             replayed += 1
                         except (IntegrityError, KeyError, ValueError) as exc:
                             errors.append("Numerical replay failed: " + str(exc))
+                elif record["kind"] == "packet":
+                    if record["payload"].get("algorithm_manifest") != current_manifest:
+                        packets_blocked += 1
+                        warnings.append("Packet replay requires recorded source/runtime: "+record["id"])
+                    else:
+                        try:
+                            from .packets import replay as packet_replay
+                            packet_replay(db,record["id"]);packets_replayed += 1
+                        except (IntegrityError,KeyError,ValueError) as exc: errors.append("Packet replay failed: "+str(exc))
+                elif record["kind"] in {"pool_snapshot","quantity_result","uncertainty_result","literature_evidence"}:
+                    try:
+                        kind=record["kind"]
+                        if kind=="pool_snapshot":
+                            from .pools import replay_snapshot
+                            replay_snapshot(db,record["id"])
+                        elif kind=="quantity_result":
+                            from .quantities import replay_result
+                            replay_result(db,record["id"])
+                        elif kind=="uncertainty_result":
+                            from .uncertainty import validate_assay
+                            validate_assay(db,kind,record["payload"],record["dependencies"],record["artifacts"])
+                        else:
+                            from .handoff import validate_handoff
+                            validate_handoff(db,record["payload"],record["dependencies"],record["artifacts"])
+                    except (IntegrityError,KeyError,TypeError,ValueError) as exc:errors.append("Evidence reconstruction failed: "+str(exc))
         objects = [p for p in db.objects.root.iterdir() if re.fullmatch(r"[0-9a-f]{64}", p.name)]
         orphans = len([p for p in objects if p.name not in artifact_keys])
         if orphans:
@@ -84,6 +109,7 @@ def audit(db):
                 "version_count": db.conn.execute("SELECT count(*) FROM versions").fetchone()[0],
                 "artifact_count": len(artifact_keys), "unreferenced_artifacts": orphans,
                 "datasets_replayed": replayed, "datasets_replay_blocked": replay_blocked,
+                "packets_replayed": packets_replayed, "packets_replay_blocked": packets_blocked,
                 "warnings": warnings, "errors": errors}
     except (sqlite3.Error, OSError, KeyError, TypeError, ValueError) as exc:
         return {"ok": False, "version_count": len(records), "artifact_count": len(artifact_keys),

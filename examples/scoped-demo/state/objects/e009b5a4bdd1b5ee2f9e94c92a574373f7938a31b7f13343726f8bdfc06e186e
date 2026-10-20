@@ -1,0 +1,12 @@
+{
+  "schema": "assay-validation-observations/1",
+  "calibration_version": "v_621847d1316d4c4ab86e4eca6081b43d",
+  "matrix": "supernatant",
+  "observations": [
+    {
+      "nominal": "500",
+      "observed": "501",
+      "unit": "mg/L"
+    }
+  ]
+}

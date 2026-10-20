@@ -58,6 +58,7 @@ def ancestry(db,version):
 
 def summarize(db,measurement_versions,*,minimum=2,assignment_versions=None):
     if type(minimum) is not int or minimum<1: raise IntegrityError("Positive minimum unit count required")
+    if not isinstance(measurement_versions,list) or any(not isinstance(v,str) for v in measurement_versions) or len(set(measurement_versions))!=len(measurement_versions): raise IntegrityError("Unique measurement versions required for unit analysis")
     bindings=[db.get(v) for v in assignment_versions] if assignment_versions is not None else db.versions("unit_assignment",heads_only=True)
     if any(r["kind"]!="unit_assignment" for r in bindings): raise IntegrityError("Expected unit assignments")
     by_subject={}
@@ -80,6 +81,8 @@ def summarize(db,measurement_versions,*,minimum=2,assignment_versions=None):
         if len(values)>1:issues.append({"reason":"duplicate_physical_acquisition","unit_version":acquisition,"measurement_versions":sorted(values)})
     assessed=0;rows=[]
     for root,values in sorted(groups.items()):
+        strains={db.get(ancestry(db,v)[-1])["payload"]["strain_version"] for v in values}
+        if len(strains)>1:issues.append({"unit_version":root,"reason":"one_physical_culture_mapped_to_multiple_strain_versions"})
         review=assessment_summary(db,root)["dimensions"]["replicate_independence"]
         used.update(review["assessment_versions"])
         if review["status"]=="supported":assessed+=1

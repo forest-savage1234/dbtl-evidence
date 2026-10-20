@@ -1,0 +1,2 @@
+measurement_id,sample_version,calibration_version,analyte_id,response,response_unit,dilution,qc,quantification,technical_replicate_id,run_id
+demo2:measurement:C1,v_e6afbfce60ca462881a8bfdbacb7467b,v_621847d1316d4c4ab86e4eca6081b43d,demo:product,2010,area,1,pass,quantified,tech:1,demo2:run

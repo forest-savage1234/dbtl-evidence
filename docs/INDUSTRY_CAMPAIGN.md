@@ -1,3 +1,5 @@
+> Historical baseline audit at the recorded v1.0 preparation commit. The 69-test count and "not modified" statements describe that audit. For the subsequent implemented v1.1–v2.0 series and remaining acceptance gates, see [V2_VALIDATION.md](V2_VALIDATION.md). This baseline is preserved, not silently reinterpreted as a current-feature audit.
+
 # Decision integrity for metabolic engineering
 
 Literature audit and engineering campaign · 20 October 2026

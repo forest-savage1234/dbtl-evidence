@@ -1,3 +1,5 @@
+> Historical broader draft. v1.9 implements a narrower one-way Claim Review report/source receipt, documented in [V2_WORKFLOW.md](V2_WORKFLOW.md). This draft schema remains unimplemented and is not accepted by that importer.
+
 # Evidence handoff: 0.1 specification draft
 
 Status: proposed contract for C01/C11 of INDUSTRY_CAMPAIGN.md. Neither application currently implements this importer/exporter. This document is not a third product, a claim of interoperability, or a scientific validation certificate.

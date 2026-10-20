@@ -10,6 +10,7 @@ import sys
 import time
 import unittest
 import importlib
+from datetime import datetime, timezone
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
@@ -49,6 +50,7 @@ def main():
     start = time.perf_counter()
     result = unittest.TextTestRunner(verbosity=2, resultclass=Result).run(suite)
     demonstration = None
+    demonstration_error = None
     if version == "1.0" and result.wasSuccessful():
         from dbtl.demo import run_demo
         demo = run_demo(ROOT / "examples/synthetic-demo")
@@ -58,18 +60,30 @@ def main():
                          "current_replay_ok": demo["current_replay"]["ok"], "audit_ok": demo["audit"]["ok"]}
         if not all(demonstration[k] for k in ["historical_replay_ok", "current_replay_ok", "audit_ok"]):
             raise SystemExit("Packaged demonstration failed")
-    files = sorted([*ROOT.glob("dbtl/*.py"), *ROOT.glob("tests/*.py"), *ROOT.glob("tools/*.py")])
-    evidence = {"release": version, "status": "passed" if result.wasSuccessful() else "failed",
+    if version == "2.0" and result.wasSuccessful():
+        try:
+            from dbtl.demo2 import run_demo2
+            demo=run_demo2(ROOT/"examples/scoped-demo")
+            demonstration={k:demo[k] for k in ["data","initial_top","reassessed_top","pool_growth_alert","added_candidates","acknowledgement_does_not_refresh","uncertain_access_reopens"]}
+            demonstration.update(historical_replay_ok=demo["historical_replay"]["ok"],reassessed_replay_ok=demo["reassessed_replay"]["ok"],audit_ok=demo["audit"]["ok"])
+            if not all(demonstration[k] for k in ["historical_replay_ok","reassessed_replay_ok","audit_ok","pool_growth_alert","uncertain_access_reopens"]):raise ValueError("Scoped campaign demonstration failed")
+        except Exception as exc:demonstration_error=type(exc).__name__+": "+str(exc)
+    files = sorted([*ROOT.glob("dbtl/*.py"), *ROOT.glob("tests/*.py"), *ROOT.glob("tools/*.py"), *ROOT.glob("tools/*.cjs")])
+    gate_ok=result.wasSuccessful() and not result.skipped and demonstration_error is None
+    evidence = {"release": version, "status": "passed" if gate_ok else "failed",
                 "tests_run": result.testsRun, "passed_tests": result.successes,
                 "failures": [(t.id(), err) for t, err in result.failures + result.errors],
                 "skipped": [(t.id(), why) for t, why in result.skipped],
                 "elapsed_seconds": time.perf_counter() - start,
                 "python": platform.python_version(), "sqlite": sqlite3.sqlite_version,
                 "platform": platform.platform(),
-                "demonstration": demonstration,
+                "demonstration": demonstration, "demonstration_error": demonstration_error,
                 "source_hashes": {str(p.relative_to(ROOT)): hashlib.sha256(p.read_bytes()).hexdigest() for p in files}}
     (ROOT / "evidence" / ("v" + version + ".json")).write_text(json.dumps(evidence, indent=2) + "\n")
-    if not result.wasSuccessful() or result.skipped:
+    attempts=ROOT/"evidence/attempts";attempts.mkdir(exist_ok=True)
+    stamp=datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%S%fZ")
+    (attempts/("v"+version+"-"+stamp+".json")).write_text(json.dumps(evidence,indent=2)+"\n")
+    if not gate_ok:
         raise SystemExit(1)
     for args in [["add", "."], ["-c", "user.name=Codex", "-c", "user.email=codex@local.invalid", "commit", "-m", "v"+version+": scoped evidence gate passed"], ["tag", "v"+version]]:
         subprocess.run(["git", *args], cwd=ROOT, check=True)

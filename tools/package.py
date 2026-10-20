@@ -8,7 +8,7 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "SCOPE.md", "CHANGELOG.md", "pyproject.toml", "CITATION.cff"}
+TOP = {"README.md", "SCOPE.md", "CHANGELOG.md", "pyproject.toml", "CITATION.cff", ".gitignore"}
 DIRECTORIES = {"dbtl", "tests", "tools", "docs", "evidence", "examples", ".github"}
 
 

@@ -51,6 +51,8 @@ class QuantityTests(unittest.TestCase):
         with self.assertRaises(IntegrityError):replay_result(self.db,r["id"])
 
     def test_zero_denominator_and_forged_result_are_rejected(self):
+        ns,ds=self.groups();r=derive(self.db,"result:valid",ns,ds,metric="mass_yield",estimator="ratio_of_means")
+        with self.assertRaises(IntegrityError):self.db.capture("result:forged","quantity_result",{**r["payload"],"value":"999"})
         self.path.write_text("pair,product,substrate,mass_unit\na,1,0,g\n")
         n=self.q("q:n",2,"product","product_mass");d=self.q("q:d",2,"substrate","substrate_consumed_mass")
         with self.assertRaises(IntegrityError):derive(self.db,"result:bad",[n["id"]],[d["id"]],metric="mass_yield",estimator="ratio_of_means")

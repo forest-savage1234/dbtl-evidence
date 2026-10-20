@@ -1,149 +1,84 @@
-# DBTL Evidence Instrument · v1.0 research release
+# DBTL Evidence Instrument · v2.0 research release
 
-Research software by **Forest Savage**.
+Research software for Forest Savage's metabolic-engineering evidence campaign.
 
-One local application for versioned product-titer comparisons and correction
-review. It coordinates a SQL registry, a content-addressed file store,
-dependency queries, numerical replay, and a readable offline report.
+Create a scoped comparison, retain its exact evidence and calculation, and find when new or changed registered evidence requires reassessment. **This is a local research instrument, not a complete solution to DBTL or an industrially validated product.**
 
-This release is a tested foundation for a specific assay workflow, **not a
-complete solution to metabolic-engineering data management or a laboratory-
-validated production platform**. Read [SCOPE.md](SCOPE.md) before using real data.
+The application coordinates a SQLite registry, retained files, graph queries and numerical computations. SQL remains useful for identity and transactions. Replacing it cannot establish physical sample identity, analytical validity, scientific interpretation or laboratory adoption.
 
-## Complementary scientific instruments
+## Run the complete synthetic campaign
 
-This project is maintained separately from Forest Savage's
-[Claim Review literature checker](https://github.com/forest-savage1234/casefile-provenance-demo/tree/main/claim-review)
-and the [ME2026 research records](https://github.com/forest-savage1234/metabolic-engineering-forensics).
-
-| Instrument | Main question | Evidence boundary |
-| --- | --- | --- |
-| [Claim Review](https://forest-savage1234.github.io/casefile-provenance-demo/claim-review/) | Can this published quantitative claim be reconstructed from the declared source data and calculation? | Source files, specified cells, numerical relationships, declared conditions, and unresolved support |
-| DBTL Evidence Instrument | Can this experimental comparison be reproduced, and which recorded outputs need reassessment when its supporting evidence changes? | Versioned samples, cultures, calibrations, measurements, comparison policies, datasets, and decisions |
-
-The projects have independent implementations and release histories. Their
-shared aim is stricter scientific data integrity. No live connector, shared
-database, or automatic transfer between the applications is implemented.
-The [companion-project design](docs/COMPANION_PROJECTS.md) describes a proposed
-evidence handoff and the checks needed before implementing it.
-
-## Industry challenge campaign
-
-The [literature audit and engineering campaign](docs/INDUSTRY_CAMPAIGN.md)
-compares both instruments with published industrial challenges. It includes an
-18-source ledger, eleven executable synthetic boundary probes, and eighteen
-proposed work packages with acceptance and stop criteria. The next priorities
-are scientific estimands and reassessment when a bounded evidence pool gains
-new relevant results. These upgrades are proposed, not implemented in v1.0.
-
-The [handoff specification](docs/EVIDENCE_HANDOFF_DRAFT.md) and accompanying
-JSON Schema are drafts. Retained probe results and the machine-readable backlog
-are under evidence/campaign/. Run python3 tools/campaign_probe.py to reproduce
-the DBTL boundary checks. No industrial efficacy or new release is claimed.
-
-## Run immediately
-
-Requires Python 3.11+ and SQLite 3.38+ with JSON support. No third-party runtime
-packages, accounts, network connection, or installation are required to run from
-the extracted source directory. Python/SQLite releases outside the tested Linux
-environment have not been qualified.
+Python 3.11+ and SQLite 3.38+ with JSON support; no third-party runtime packages, account or network needed. The actual release gate records the tested Python/SQLite versions. Other runtime/platform combinations remain unqualified until their checks run.
 
 ```bash
 python3 -m dbtl --version
-python3 -m dbtl demo --output my-synthetic-demo
+python3 -m dbtl demo2 --output my-scoped-demo
 python3 -m unittest discover -v
 ```
 
-Open `my-synthetic-demo/report.html` in a browser. The demo refuses to overwrite
-a populated destination. The bundle also contains a ready-made example under
-`examples/synthetic-demo/`, including three reports and the retained registry.
+Open `my-scoped-demo/report.html`. All data, observations and supporting reviews in this demonstration are **invented**. Initially A has the larger descriptive mean. Two newly registered C cultures reopen the old decision; explicit reassessment includes C. An unresolved access notice then reopens the new packet. Historical packets remain replayable under their recorded code/runtime. Acknowledgment does not refresh evidence.
 
-The deliberate calibration correction changes the descriptive winner from A
-(0.60 g/L) to B (0.51 g/L); A recalculates to 0.30 g/L. Both have two declared
-culture units. Technical repeats are averaged within each culture before the
-strain-level mean. Two unsuitable measurements remain visible as exclusions.
-The earlier result and decision are preserved; two affected outputs receive
-review findings. These are synthetic demonstration outcomes, not lab results.
+The bundled `examples/scoped-demo/` retains this campaign. `python3 -m dbtl demo` runs the older calibration-correction demonstration, which reverses its descriptive ranking. Historical v1.0 bundled datasets may require the v1.0 code/runtime to replay; their preserved records remain readable.
 
-## Main operations
+## What changed from 1.0
 
-Global `--root` and `--actor` options precede the subcommand. Operators are
-asserted names; this local release does not authenticate users.
+| Release | Implemented boundary |
+| --- | --- |
+| 1.1 | Separate reviewer assessments of six evidence dimensions |
+| 1.2 | Bounded registered-measurement pools and reconstructable snapshots |
+| 1.3 | Membership/availability changes and explicit review of watched outputs |
+| 1.4 | Source-bound quantity basis, units and paired versus pooled ratios |
+| 1.5 | Physical culture/aliquot/acquisition mappings and assessed independence |
+| 1.6 | Material-, time-, generation- and region-scoped genotype observations |
+| 1.7 | Assay evidence, proxy/censoring boundaries and conditional covariance propagation |
+| 1.8 | Realized sensor trajectories, clock scope, observation gaps and explicit limits |
+| 1.9 | One-way Claim Review report-and-source receipt, preserving upstream limitations |
+| 2.0 | Frozen decision packets, explicit human selection, current-state reconciliation, CLI and recovery |
+
+Each increment is a separate tested commit/tag. Gate receipts list test IDs, outcomes, runtime and source hashes in `evidence/v*.json`. The number 2.0 denotes this implemented scope, not laboratory readiness.
+
+## The primary v2 workflow
+
+Global `--root` and `--actor` precede subcommands. Actors and reviews are assertions, not authenticated identities.
 
 ```bash
 python3 -m dbtl --root my-state init
-python3 -m dbtl --root my-state --actor researcher capture protocol:1 protocol protocol.json --reason "Initial protocol capture"
-python3 -m dbtl --root my-state ingest peak_areas.csv
+python3 -m dbtl --root my-state ingest peak-areas.csv
+python3 -m dbtl --root my-state capture protocol:1 protocol protocol.json --reason "Initial capture"
 python3 -m dbtl --root my-state list --kind measurement
+python3 -m dbtl --root my-state packet --help
+python3 -m dbtl --root my-state packet-status PACKET_VERSION
+python3 -m dbtl --root my-state packet-replay PACKET_VERSION
+python3 -m dbtl --root my-state packet-report PACKET_VERSION --output packet.html
+python3 -m dbtl --root my-state watch-list
 python3 -m dbtl --root my-state audit
-python3 -m dbtl --root my-state reviews
-python3 -m dbtl --root my-state report --output report.html
 python3 -m dbtl --root my-state backup --output snapshot.zip
 python3 -m dbtl restore snapshot.zip restored-state
 ```
 
-Use `python3 -m dbtl <command> --help` for the exact arguments for `cohort`,
-`freeze`, `replay`, `impact`, `decide`, `review`, `recalibrate`, and
-`refresh-cohort`. Capture uses JSON objects and exact version references.
-Revisions require `--expected <current-version-id>` and an explicit reason.
-`--evidence <local-file>` retains evidence bytes; extra construction inputs use
-`--dependency recipient=<strain-version>` and other documented roles.
+Replace uppercase version placeholders with returned exact version IDs. [The workflow guide](docs/V2_WORKFLOW.md) explains required records, statuses and commands. Capture revisions require the exact current `--expected` version and a reason. Generic JSON/CSV entry remains an engineering interface; a guided scientist interface has not been evaluated.
 
-## What the release proves
+`packet` enforces scoped evidence gates; `advance` records an explicit human choice from a current eligible packet. `freeze` and `decide` retain the narrower legacy v1 behavior for compatibility and **do not enforce v2 gates**. A successful legacy decision is not a v2-qualified selection.
 
-- Histories cannot be overwritten through the normal API or ordinary SQL DML.
-- Retained artifacts are rehashed before a dataset calculation/replay.
-- Raw signal values are checked against their claimed retained CSV row.
-- Current calculations refuse superseded input versions.
-- Historical calculations use exact saved inputs and the recorded implementation.
-- Correction findings identify downstream current outputs and explain a path.
-- Dataset membership includes excluded candidates so they remain in the graph.
-- Technical acquisitions do not become independent biological sample counts.
-- Acknowledging a review does not make stale evidence current.
-- Committed state can be backed up, verified, and restored without arbitrary ZIP extraction.
+## Separate, complementary projects
 
-These are demonstrated software behaviors over synthetic fixtures. They do not
-prove correct physical labeling, validated calibration, causal attribution,
-independence of cultures, statistically significant improvement, or faster DBTL
-cycles in a laboratory.
+[Claim Review](https://github.com/forest-savage1234/casefile-provenance-demo/tree/main/claim-review) remains unchanged and independently executable. [ME2026 research records](https://github.com/forest-savage1234/metabolic-engineering-forensics) remain separate. No code or unrelated workflows from those projects are merged here.
 
-## Data contract
+`claim-import` receives a supported Claim Review report and its original source bytes. It retains open/conflicting checks verbatim and keeps all consumer scientific dimensions open. It neither re-executes the checker nor authenticates the producer. Literature receipts are reference-only in packets; they cannot increase local culture counts. See [the companion boundary](docs/COMPANION_PROJECTS.md).
 
-See [the contract](docs/DATA_CONTRACT.md) for identifiers, units, required
-context, calibration convention, supported corrections, and exclusions.
-[The architecture](docs/ARCHITECTURE.md) separates implemented components from
-future integrations. [The research survey](docs/RESEARCH.md) reviews 25
-systems/standards and documents close prior art. [The challenge log](docs/CHALLENGES.md)
-records defects found, fixes, evidence, and residual gaps at each milestone.
+## Research and unclosed gates
 
-The entry interface is a CLI plus JSON/CSV, with a read-only HTML report. A
-guided wet-lab interface and usability evaluation remain necessary to address
-the biologist/developer workflow gap.
+The [industry campaign](docs/INDUSTRY_CAMPAIGN.md) is the preserved v1.0 baseline audit: 18 scientific sources and a targeted review, not an exhaustive census. The earlier [survey](docs/RESEARCH.md) covers 25 systems/standards and close prior art. [v2 validation status](docs/V2_VALIDATION.md) maps the campaign to delivered software and remaining work. [The field protocol](docs/FIELD_VALIDATION_PROTOCOL.md) specifies the comparative evaluation still required.
 
-## Release evidence and history
+Passing tests demonstrates bounded software behavior on synthetic data. It does not establish genuine independent cultures, source authenticity, valid assays, whole-genome correctness, process equivalence, statistical superiority, industrial transfer or faster laboratory cycles. First-order uncertainty is conditional on supplied covariance; omitted effects remain unresolved. Pool coverage is registered history only. No live upstream discovery, background alerts, ELN/LIMS integration, authentication, remote storage or industrial omics-scale qualification is implemented.
 
-The local Git tags are `v0.1`, `v0.2`, …, `v0.9`, `v1.0`. Each gate writes its
-test IDs, outcome, environment, and code hashes under `evidence/` before the
-corresponding commit. They are actual sequential implementations, not ten
-labels for one final code snapshot.
+## Recover and publish
 
-Citation metadata are in [CITATION.cff](CITATION.cff). Licensing of this new
-project has not been selected; related projects and their dependencies retain
-their own existing license terms.
-
-If the source bundle contains `history.bundle`, recover the history with:
+The source archive includes file hashes and complete local Git history. Recover it with:
 
 ```bash
 git clone history.bundle reconstructed-history
 git -C reconstructed-history tag --list
 ```
 
-To verify the source archive itself, hash every file listed in
-`PACKAGE_MANIFEST.json`. Hashes provide consistency, not an independent
-signature or proof of authorship. Generated state is replayable only under the
-recorded source and exact Python/SQLite versions; incompatible runtimes are
-reported as blocked rather than silently reinterpreted.
-
-Run `python3 tools/benchmark.py` to repeat the local benchmark. The saved result
-is small-scale single-process evidence, not a forecast of omics throughput or
-a comparison with an optimized existing platform.
+No standalone GitHub publication is claimed. The intended `forest-savage1234/dbtl-evidence` repository was unavailable to the connection, which cannot create repositories. [Publishing instructions](docs/PUBLISHING.md) preserve the independent project and all tags. Licensing for this new project has not been selected; third-party projects retain their existing terms.

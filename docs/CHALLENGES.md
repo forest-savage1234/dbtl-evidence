@@ -60,3 +60,9 @@ universal correctness. Exact test IDs and source hashes are in `evidence/v*.json
 
 The next highest-value step is a blinded real-data comparison with an existing
 solution, not adding more version numbers or claiming the whole field is solved.
+
+## v1.1–v2.0 challenges
+
+All ten release scopes and adverse checks are recorded under docs/releases. During this series the v1.6 gate caught a misplaced module before tagging; the import location was corrected and the full gate rerun. New conflicting reviews required reconciliation beyond existing dependency edges. A fresh pool snapshot could otherwise reintroduce withdrawn readings into a mean; filtering current eligible members and retaining pool exclusions repaired this. Global physical-root checks prevent one declared culture from supporting two strains. Malformed contracts fail as IntegrityError and roll back rather than exposing implementation exceptions.
+
+The v2.0 gate includes independent Fraction and set oracles, missing-evidence withholding, current/historical divergence, source changes, field scope, report/source receipt, clean-package execution and verified backup/restore. No external efficacy gate listed above is closed merely by this local series. The next real-data step is specified in FIELD_VALIDATION_PROTOCOL.md.

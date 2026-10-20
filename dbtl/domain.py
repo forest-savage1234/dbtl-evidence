@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind in {"packet_policy", "packet", "advance"}:
+        from .packets import packet_dependencies
+        return packet_dependencies(kind, payload)
     if kind == "literature_evidence":
         return []
     if kind in {"trajectory", "process_policy"}:
@@ -86,6 +89,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind in {"packet_policy", "packet", "advance"}:
+        from .packets import validate_packet
+        validate_packet(db, kind, payload, deps, artifacts)
     if kind == "literature_evidence":
         from .handoff import validate_handoff
         validate_handoff(db, payload, deps, artifacts)
