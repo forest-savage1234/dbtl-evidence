@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind in {"availability", "watch", "watch_review"}:
+        from .watches import watch_dependencies
+        return watch_dependencies(kind, payload)
     if kind in {"pool", "pool_snapshot"}:
         from .pools import pool_dependencies
         return pool_dependencies(kind, payload)
@@ -66,6 +69,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind in {"availability", "watch", "watch_review"}:
+        from .watches import validate_watch_record
+        validate_watch_record(db, kind, payload, deps)
     if kind in {"pool", "pool_snapshot"}:
         from .pools import validate_pool_record
         validate_pool_record(db, kind, payload, deps)
