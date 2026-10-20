@@ -1,0 +1,70 @@
+{
+  "schema": "decision-evidence/0.1-draft",
+  "evidence_id": "synthetic:product-biomass-ratio",
+  "origin": "synthetic_fixture",
+  "producer": {
+    "name": "Claim Review audited core fixture",
+    "version": "0.3.2-browser",
+    "code_sha256": "89fd6fe7ebb04640abfbe50889e75fc803e21ee8cadafbdd72c7beb67d8fb874"
+  },
+  "sources": [
+    {
+      "id": "synthetic:ratio-source",
+      "sha256": "fdde8406ecfbd10d47d385e2daaf754e4c51f90671267d8c3628e2ddfe835c3d",
+      "uri": null,
+      "version": "synthetic fixture 1",
+      "location": "Table!A2:B2"
+    }
+  ],
+  "quantity": {
+    "kind": "other",
+    "measurand": "synthetic product mass / biomass mass",
+    "value": "0.50",
+    "unit": "g/g",
+    "basis": "Product divided by biomass; this is not product/substrate yield.",
+    "estimator": "single-observation ratio",
+    "experimental_unit": "unresolved",
+    "independence": "unresolved"
+  },
+  "assessments": {
+    "arithmetic": {
+      "status": "supported",
+      "basis": "10 g / 20 g = 0.50 g/g in CR-01.",
+      "source_refs": [
+        "synthetic:ratio-source"
+      ]
+    },
+    "measurement": {
+      "status": "open",
+      "basis": "Synthetic values; no analytical validation.",
+      "source_refs": []
+    },
+    "sample_identity": {
+      "status": "open",
+      "basis": "No physical sample exists.",
+      "source_refs": []
+    },
+    "replicate_independence": {
+      "status": "open",
+      "basis": "No independent experimental units established.",
+      "source_refs": []
+    },
+    "comparability": {
+      "status": "open",
+      "basis": "No target-process comparison established.",
+      "source_refs": []
+    },
+    "publication_version": {
+      "status": "out_of_scope",
+      "basis": "Synthetic fixture; no publication.",
+      "source_refs": []
+    }
+  },
+  "use_scope": {
+    "intended_use": "Demonstrate preservation of separate evidence dimensions; not experimental use.",
+    "target_process": "SYNTHETIC ONLY",
+    "as_of": "2026-10-20T00:00:00Z",
+    "pool_coverage": "fixed_source_only",
+    "pool_snapshot_sha256": null
+  }
+}

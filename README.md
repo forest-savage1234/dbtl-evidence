@@ -27,6 +27,20 @@ database, or automatic transfer between the applications is implemented.
 The [companion-project design](docs/COMPANION_PROJECTS.md) describes a proposed
 evidence handoff and the checks needed before implementing it.
 
+## Industry challenge campaign
+
+The [literature audit and engineering campaign](docs/INDUSTRY_CAMPAIGN.md)
+compares both instruments with published industrial challenges. It includes an
+18-source ledger, eleven executable synthetic boundary probes, and eighteen
+proposed work packages with acceptance and stop criteria. The next priorities
+are scientific estimands and reassessment when a bounded evidence pool gains
+new relevant results. These upgrades are proposed, not implemented in v1.0.
+
+The [handoff specification](docs/EVIDENCE_HANDOFF_DRAFT.md) and accompanying
+JSON Schema are drafts. Retained probe results and the machine-readable backlog
+are under evidence/campaign/. Run python3 tools/campaign_probe.py to reproduce
+the DBTL boundary checks. No industrial efficacy or new release is claimed.
+
 ## Run immediately
 
 Requires Python 3.11+ and SQLite 3.38+ with JSON support. No third-party runtime
