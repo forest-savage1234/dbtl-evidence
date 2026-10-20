@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind in {"pool", "pool_snapshot"}:
+        from .pools import pool_dependencies
+        return pool_dependencies(kind, payload)
     if kind == "assessment":
         from .assessments import assessment_dependencies
         return assessment_dependencies(payload)
@@ -63,6 +66,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind in {"pool", "pool_snapshot"}:
+        from .pools import validate_pool_record
+        validate_pool_record(db, kind, payload, deps)
     if kind == "assessment":
         from .assessments import validate_assessment
         validate_assessment(db, payload, deps, artifacts)
