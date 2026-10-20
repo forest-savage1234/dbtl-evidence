@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind == "genotype_observation":
+        from .genotypes import genotype_dependencies
+        return genotype_dependencies(payload)
     if kind in {"experimental_unit", "unit_assignment"}:
         from .units import unit_dependencies
         return unit_dependencies(kind, payload)
@@ -75,6 +78,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind == "genotype_observation":
+        from .genotypes import validate_genotype
+        validate_genotype(db, payload, deps, artifacts)
     if kind in {"experimental_unit", "unit_assignment"}:
         from .units import validate_unit_record
         validate_unit_record(db, kind, payload, deps, entity_id)
