@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind in {"experimental_unit", "unit_assignment"}:
+        from .units import unit_dependencies
+        return unit_dependencies(kind, payload)
     if kind in {"quantity", "quantity_result"}:
         from .quantities import quantity_dependencies
         return quantity_dependencies(kind, payload)
@@ -72,6 +75,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind in {"experimental_unit", "unit_assignment"}:
+        from .units import validate_unit_record
+        validate_unit_record(db, kind, payload, deps, entity_id)
     if kind in {"quantity", "quantity_result"}:
         from .quantities import validate_quantity_record
         validate_quantity_record(db, kind, payload, deps, artifacts)

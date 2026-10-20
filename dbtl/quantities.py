@@ -86,12 +86,16 @@ def compute_result(db, numerators, denominators, metric, estimator, *, historica
             if not isinstance(versions,list) or not versions or len(versions)>1000 or len(set(versions))!=len(versions):
                 raise IntegrityError("Use 1–1000 unique source quantity versions")
             group=[]
+            locators=set()
             for v in versions:
                 r=db.get(v)
                 if r["kind"]!="quantity" or r["payload"]["basis"]!=basis: raise IntegrityError("Denominator/numerator semantic basis does not support metric")
                 verify_closure(db,v)
                 if not historical and (db.latest(r["entity_id"])["id"]!=v or outdated_sources(db,v)): raise IntegrityError("Superseded quantity evidence requires explicit reconciliation")
                 validate_quantity_record(db,"quantity",r["payload"],r["dependencies"],r["artifacts"])
+                locator=tuple(r["payload"][k] for k in ["source_digest","row","value_column"])
+                if locator in locators: raise IntegrityError("Duplicate source observations are not new replication")
+                locators.add(locator)
                 p=r["payload"];scale=Decimal(1)/60 if p["unit"]=="min" else Decimal(UNITS[p["unit"]][1])
                 group.append((p["pair_id"],number(p["value"])*scale,p["measurand_id"]))
             if len({x[2] for x in group})!=1: raise IntegrityError("Do not pool different measurands")
