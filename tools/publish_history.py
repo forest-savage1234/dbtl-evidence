@@ -25,6 +25,8 @@ def run(publish=False):
     config=json.loads((ROOT/"evidence/github-history-publication.json").read_text())
     if config["schema"]!="dbtl-history-publication/1" or config["repository"]!=REPOSITORY or config["release_commit"]!=RELEASE:
         raise ValueError("Unexpected publication identity")
+    if config.get("native_tags")!=["v2.0"]:raise ValueError("Only the current workflow-compatible tag is published natively; older tags remain in the bundle")
+    native={tag:config["tags"][tag] for tag in config["native_tags"]}
     if os.environ.get("GITHUB_REPOSITORY",REPOSITORY)!=REPOSITORY:raise ValueError("Wrong target repository")
     bundle=ROOT/"history.bundle"
     if sha256(bundle.read_bytes()).hexdigest()!=config["bundle_sha256"]:raise ValueError("History bundle bytes differ")
@@ -44,16 +46,16 @@ def run(publish=False):
     git("fetch","origin","main")
     remote=git("rev-parse","refs/remotes/origin/main").stdout.strip()
     remote_tags={line.split()[1].removeprefix("refs/tags/"):line.split()[0] for line in git("ls-remote","--tags","origin").stdout.splitlines()}
-    for tag,expected in config["tags"].items():
+    for tag,expected in native.items():
         if tag in remote_tags and remote_tags[tag]!=expected:raise ValueError("Refuse to replace remote tag: "+tag)
     if git("merge-base","--is-ancestor",RELEASE,remote,check=False).returncode==0:
-        if all(remote_tags.get(t)==v for t,v in config["tags"].items()):return {"status":"already_published","commit":remote,"original_tags":len(config["tags"])}
+        if all(remote_tags.get(t)==v for t,v in native.items()):return {"status":"already_published","commit":remote,"native_tags":list(native),"original_tags_retained_in_bundle":len(config["tags"])}
         raise ValueError("Existing ancestry has incomplete tags; review before repair")
     if git("rev-parse","HEAD").stdout.strip()!=remote:raise ValueError("Remote main changed; use a fresh checkout, no overwrite attempted")
     git("-c","user.name=github-actions[bot]","-c","user.email=41898282+github-actions[bot]@users.noreply.github.com",
         "merge","--allow-unrelated-histories","--strategy=ours","--no-edit","-m","Preserve original DBTL release ancestry and tags",RELEASE)
-    git("push","--atomic","origin","HEAD:refs/heads/main",*("refs/tags/"+t+":refs/tags/"+t for t in sorted(config["tags"])))
-    return {"status":"published","commit":git("rev-parse","HEAD").stdout.strip(),"original_tags":len(config["tags"])}
+    git("push","--atomic","origin","HEAD:refs/heads/main",*("refs/tags/"+t+":refs/tags/"+t for t in sorted(native)))
+    return {"status":"published","commit":git("rev-parse","HEAD").stdout.strip(),"native_tags":list(native),"original_tags_retained_in_bundle":len(config["tags"])}
 
 
 if __name__=="__main__":

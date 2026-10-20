@@ -26,5 +26,9 @@
     "v2.0": "512d2c26804f61795a17c52330281727a2826848"
   },
   "archive_sha256": "a1aa5f4ec1e6af5ed06fe135e2713511add503e0262d9f7b56f54728d2156b3d",
-  "source_gate": "evidence/v2.0.json"
+  "source_gate": "evidence/v2.0.json",
+  "native_tags": [
+    "v2.0"
+  ],
+  "publication_limit": "GitHub Actions token cannot create older tags containing different workflow versions. Their original refs remain in history.bundle; the native v2.0 tag and complete commit ancestry are published without rewriting them."
 }
