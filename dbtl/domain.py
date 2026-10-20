@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind in {"trajectory", "process_policy"}:
+        from .process import process_dependencies
+        return process_dependencies(kind, payload)
     if kind in {"assay_profile", "uncertainty_result"}:
         from .uncertainty import assay_dependencies
         return assay_dependencies(kind, payload)
@@ -81,6 +84,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind in {"trajectory", "process_policy"}:
+        from .process import validate_process
+        validate_process(db, kind, payload, deps, artifacts)
     if kind in {"assay_profile", "uncertainty_result"}:
         from .uncertainty import validate_assay
         validate_assay(db, kind, payload, deps, artifacts)
