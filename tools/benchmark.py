@@ -45,7 +45,7 @@ def main():
             writer = csv.DictWriter(stream, fieldnames=FIELDS); writer.writeheader()
             for i in range(args.measurements):
                 writer.writerow({"measurement_id": f"m:{i}", "sample_version": parts["sample"]["id"], "calibration_version": parts["calibration"]["id"],
-                    "analyte_id": "CHEBI:synthetic-product", "response": "1010", "response_unit": "area", "dilution": "1", "qc": "pass",
+                    "analyte_id": "demo:product", "response": "1010", "response_unit": "area", "dilution": "1", "qc": "pass",
                     "quantification": "quantified", "technical_replicate_id": f"tech:{i}", "run_id": "run:benchmark"})
         start = time.perf_counter(); imported = ingest_csv(db, raw)
         result["csv_measurements"] = imported["rows"]

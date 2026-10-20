@@ -1,0 +1,122 @@
+<!doctype html><html lang='en'><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'><meta http-equiv='Content-Security-Policy' content="default-src 'none'; style-src 'unsafe-inline'; script-src 'none'"><title>Synthetic correction · decisions need review</title><style>body{margin:0;background:#f4f3ee;color:#172f35;font:16px/1.6 system-ui,sans-serif}main{max-width:1080px;margin:auto;padding:52px 24px}h1{font-size:clamp(30px,5vw,52px);line-height:1.15;letter-spacing:-1.8px;max-width:850px}h2{margin-top:42px;font-size:25px}.eyebrow{font-size:12px;font-weight:750;letter-spacing:2px;color:#466460}.lead{font-size:21px;max-width:760px}.notice{padding:18px 22px;border-left:4px solid #bd8747;background:#fff5e4;max-width:900px}.good{color:#146644;font-weight:700}.bad{color:#aa2530;font-weight:700}.scroll{overflow:auto}table{width:100%;border-collapse:collapse;background:#fff;margin:16px 0 24px;font-size:14px}td,th{text-align:left;padding:12px 15px;border-bottom:1px solid #d7e0dc;vertical-align:top}th{background:#e3ece6}details{background:#fff;margin:12px 0;padding:14px 18px;border-radius:6px}summary{cursor:pointer;font-weight:650}pre{overflow:auto;font:12px/1.6 ui-monospace,monospace;white-space:pre-wrap;overflow-wrap:anywhere}footer{margin-top:48px;padding-top:22px;border-top:1px solid #bbc9c2;font-size:13px;color:#526765}</style><main><p class='eyebrow'>DBTL EVIDENCE · LOCAL RESEARCH INSTRUMENT</p><h1>Synthetic correction · decisions need review</h1><p class='lead'>Reconstruct the comparison. Preserve the earlier result. Review what changed.</p><div class='notice'>Scope: calibrated product titer from exported peak areas. All demo data are synthetic. Local integrity and numerical replay do not establish biological truth or experimental comparability beyond the declared policy.</div><h2>Registry integrity</h2><p class='good'>Local consistency checks passed</p><pre>{
+  &quot;ok&quot;: true,
+  &quot;meaning&quot;: &quot;Local registry/byte consistency; not scientific validity or authenticated provenance&quot;,
+  &quot;version_count&quot;: 31,
+  &quot;artifact_count&quot;: 16,
+  &quot;unreferenced_artifacts&quot;: 0,
+  &quot;datasets_replayed&quot;: 1,
+  &quot;datasets_replay_blocked&quot;: 0,
+  &quot;warnings&quot;: [],
+  &quot;errors&quot;: []
+}</pre><h2>Correction review</h2><p>2 pending findings against current outputs. Acknowledgement records a human disposition; it does not make old evidence current.</p><div class='scroll'><table><thead><tr><th>Output</th><th>Changed source</th><th>State</th><th>Dependency steps</th></tr></thead><tbody><tr><td>demo:dataset</td><td>demo:calibration-A</td><td>needs review</td><td>3</td></tr><tr><td>demo:decision</td><td>demo:calibration-A</td><td>needs review</td><td>4</td></tr></tbody></table></div><details><summary>demo:dataset ← demo:calibration-A</summary><pre>{
+  &quot;finding_id&quot;: &quot;818c7eedd5d27f05f6434b5c8e1362657ec1e7b9f3663f60622ac7f076405b0a&quot;,
+  &quot;target_version&quot;: &quot;v_9be7e6430f314a4daf44abf659690dba&quot;,
+  &quot;target_entity&quot;: &quot;demo:dataset&quot;,
+  &quot;target_kind&quot;: &quot;dataset&quot;,
+  &quot;source_old&quot;: &quot;v_c0e6c096a8ca4d2db6957a1818f2a744&quot;,
+  &quot;source_current&quot;: &quot;v_ab1adadccf0c4da39f25aa9cb3bb8492&quot;,
+  &quot;source_entity&quot;: &quot;demo:calibration-A&quot;,
+  &quot;path&quot;: [
+    {
+      &quot;source&quot;: &quot;v_c0e6c096a8ca4d2db6957a1818f2a744&quot;,
+      &quot;dependent&quot;: &quot;v_23c784a8d5ed41cc9922e67e9a9bac69&quot;,
+      &quot;role&quot;: &quot;calibration&quot;
+    },
+    {
+      &quot;source&quot;: &quot;v_23c784a8d5ed41cc9922e67e9a9bac69&quot;,
+      &quot;dependent&quot;: &quot;v_d78de9702f154dca8ba3bf859a1bb661&quot;,
+      &quot;role&quot;: &quot;candidate&quot;
+    },
+    {
+      &quot;source&quot;: &quot;v_d78de9702f154dca8ba3bf859a1bb661&quot;,
+      &quot;dependent&quot;: &quot;v_9be7e6430f314a4daf44abf659690dba&quot;,
+      &quot;role&quot;: &quot;cohort&quot;
+    }
+  ],
+  &quot;path_complete&quot;: true,
+  &quot;total_steps&quot;: 3,
+  &quot;acknowledged&quot;: false,
+  &quot;disposition&quot;: null,
+  &quot;meaning&quot;: &quot;Evidence changed; reassessment is required, not automatic rejection.&quot;
+}</pre></details><details><summary>demo:decision ← demo:calibration-A</summary><pre>{
+  &quot;finding_id&quot;: &quot;323b79a178d8f3fa918fa9f4e54d6bdf99cbbad9ae8949e9656d7eac604ddcf4&quot;,
+  &quot;target_version&quot;: &quot;v_aac71f459d0240e58c906164bc1ff025&quot;,
+  &quot;target_entity&quot;: &quot;demo:decision&quot;,
+  &quot;target_kind&quot;: &quot;decision&quot;,
+  &quot;source_old&quot;: &quot;v_c0e6c096a8ca4d2db6957a1818f2a744&quot;,
+  &quot;source_current&quot;: &quot;v_ab1adadccf0c4da39f25aa9cb3bb8492&quot;,
+  &quot;source_entity&quot;: &quot;demo:calibration-A&quot;,
+  &quot;path&quot;: [
+    {
+      &quot;source&quot;: &quot;v_c0e6c096a8ca4d2db6957a1818f2a744&quot;,
+      &quot;dependent&quot;: &quot;v_23c784a8d5ed41cc9922e67e9a9bac69&quot;,
+      &quot;role&quot;: &quot;calibration&quot;
+    },
+    {
+      &quot;source&quot;: &quot;v_23c784a8d5ed41cc9922e67e9a9bac69&quot;,
+      &quot;dependent&quot;: &quot;v_d78de9702f154dca8ba3bf859a1bb661&quot;,
+      &quot;role&quot;: &quot;candidate&quot;
+    },
+    {
+      &quot;source&quot;: &quot;v_d78de9702f154dca8ba3bf859a1bb661&quot;,
+      &quot;dependent&quot;: &quot;v_9be7e6430f314a4daf44abf659690dba&quot;,
+      &quot;role&quot;: &quot;cohort&quot;
+    },
+    {
+      &quot;source&quot;: &quot;v_9be7e6430f314a4daf44abf659690dba&quot;,
+      &quot;dependent&quot;: &quot;v_aac71f459d0240e58c906164bc1ff025&quot;,
+      &quot;role&quot;: &quot;dataset&quot;
+    }
+  ],
+  &quot;path_complete&quot;: true,
+  &quot;total_steps&quot;: 4,
+  &quot;acknowledged&quot;: false,
+  &quot;disposition&quot;: null,
+  &quot;meaning&quot;: &quot;Evidence changed; reassessment is required, not automatic rejection.&quot;
+}</pre></details><h2>demo:dataset · revision 1</h2><p>Numerical replay passed. Historical evidence has superseded inputs.</p><div class='scroll'><table><thead><tr><th>Strain</th><th>Mean titer (g/L)</th><th>Biological units</th><th>Sample SD (g/L)</th><th>Descriptive rank</th></tr></thead><tbody><tr><td>demo:strain-A</td><td>0.6</td><td>2</td><td>0</td><td>1</td></tr><tr><td>demo:strain-B</td><td>0.51</td><td>2</td><td>0.014142135623730950488016887242096980785696718753769</td><td>2</td></tr></tbody></table></div><p>Descriptive ranking under declared context; no significance, causal effect, or yield claim.</p><details><summary>Declared comparison policy and eligibility</summary><pre>{
+  &quot;analyte_id&quot;: &quot;demo:product&quot;,
+  &quot;context&quot;: {
+    &quot;batch&quot;: &quot;demo:batch-1&quot;,
+    &quot;compartment&quot;: &quot;supernatant&quot;,
+    &quot;culture_protocol_version&quot;: &quot;v_799c8a6493094180a897ac8848bae53c&quot;,
+    &quot;extraction_protocol_version&quot;: &quot;v_60efafb63a7f42b29909b9122bf782b3&quot;,
+    &quot;medium&quot;: &quot;demo:defined-medium&quot;,
+    &quot;oxygenation&quot;: &quot;shaken-aerobic&quot;,
+    &quot;ph&quot;: &quot;7&quot;,
+    &quot;temperature_c&quot;: &quot;30&quot;,
+    &quot;time_h&quot;: &quot;24&quot;,
+    &quot;vessel&quot;: &quot;demo:flask&quot;
+  },
+  &quot;genotype_requirement&quot;: &quot;any&quot;,
+  &quot;metric&quot;: &quot;titer_g_l&quot;,
+  &quot;min_biological_replicates&quot;: 2,
+  &quot;technical_aggregation&quot;: &quot;arithmetic_mean&quot;
+}</pre></details><details><summary>Excluded measurements (2)</summary><div class='scroll'><table><thead><tr><th>Measurement version</th><th>Reasons</th></tr></thead><tbody><tr><td>v_23c784a8d5ed41cc9922e67e9a9bac69</td><td>quantification:below_loq</td></tr><tr><td>v_406cf085f72145988dcb64c408fc420a</td><td>context_mismatch:batch</td></tr></tbody></table></div></details><details><summary>Exact evidence and computation identifiers</summary><pre>{
+  &quot;dataset_version&quot;: &quot;v_9be7e6430f314a4daf44abf659690dba&quot;,
+  &quot;result_sha256&quot;: &quot;30926ad77f394ad5d7ab5e36fad709c9b5920ab2095f463a3fce2b599174d304&quot;,
+  &quot;algorithm_manifest&quot;: {
+    &quot;algorithm_id&quot;: &quot;linear-titer-comparison:1&quot;,
+    &quot;decimal_precision&quot;: 50,
+    &quot;files&quot;: {
+      &quot;__init__.py&quot;: &quot;508251b56af8c83271808bd744afef4028c71dfd4754d7a8862c7bd9927970c1&quot;,
+      &quot;__main__.py&quot;: &quot;935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d&quot;,
+      &quot;audit.py&quot;: &quot;b9b8daa2c1e6684b1f030078dfb8c0dc31ccbdab4089590225c16dbd00ca1732&quot;,
+      &quot;backup.py&quot;: &quot;85c1fa2d74a837bea4197a82d4ec34c1da2f1b21b673d1892087b0bce467aabf&quot;,
+      &quot;calc.py&quot;: &quot;204804864298f1e9d49e4e04d32de5454b265cf5939da3cdaf5dcb0566b27fd2&quot;,
+      &quot;cli.py&quot;: &quot;ab80b8c29f4378a4bbbe56c966d718fabcae2f5f9e59077c394befedbfbbb0e0&quot;,
+      &quot;core.py&quot;: &quot;3c46879439d87b80ff435817157dbe590512742d0472cf2980ca6d5a28fe1d99&quot;,
+      &quot;datasets.py&quot;: &quot;c323d0fb82ff1dead46c76621d796b35550ccffa105517117022c265178d79ce&quot;,
+      &quot;demo.py&quot;: &quot;59327ebf3422c4627c12d267690129556d9f4ef94597f4f6009152d7e7ad8362&quot;,
+      &quot;domain.py&quot;: &quot;94d35f6fc5ebcb78070b6a2b13802941f71459c2dc9c154072c503be30f952b5&quot;,
+      &quot;graph.py&quot;: &quot;f55a5c4d2ba55763286d9119e7a75da7b5e3627c06ca4010bf8598bb19ec2d8e&quot;,
+      &quot;ingest.py&quot;: &quot;5d997477418b2e8918bda695cdb2f16888b97e1239455a13918f1de3dff04a06&quot;,
+      &quot;report.py&quot;: &quot;5bd836a702d6ae779ccb5e774c8a1d7e7ab1986eda6809f0c9e53f622973459d&quot;,
+      &quot;review.py&quot;: &quot;d74db0386a601824df9655fbdd1d3aa587181f3269531fc669797fc4b5ffd463&quot;,
+      &quot;storage.py&quot;: &quot;127422ae066b87d039568aa19507227847b797beec72d6415edb06423f181025&quot;
+    },
+    &quot;python_implementation&quot;: &quot;CPython&quot;,
+    &quot;python_version&quot;: &quot;3.12.14&quot;,
+    &quot;rounding&quot;: &quot;ROUND_HALF_EVEN&quot;,
+    &quot;sqlite_version&quot;: &quot;3.53.1&quot;
+  }
+}</pre></details><h2>Recorded decisions</h2><div class='scroll'><table><thead><tr><th>Decision</th><th>Revision</th><th>Selected strains</th><th>Rationale</th></tr></thead><tbody><tr><td>demo:decision</td><td>1</td><td>demo:strain-A</td><td>SYNTHETIC: A has the larger eligible descriptive mean; this is not significance evidence.</td></tr></tbody></table></div><footer>Historical replay, current eligibility, and scientific validity are separate assessments. Calibration coefficients and sample identities are operator-supplied. No authentication, remote adapters, or enterprise scale qualification is provided by this release.</footer></main></html>

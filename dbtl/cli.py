@@ -38,6 +38,8 @@ def parser():
     commands.add_parser("audit")
     q = commands.add_parser("report"); q.add_argument("--output", required=True)
     q = commands.add_parser("demo"); q.add_argument("--output", default="demo-output")
+    q = commands.add_parser("backup"); q.add_argument("--output", required=True)
+    q = commands.add_parser("restore"); q.add_argument("archive"); q.add_argument("destination")
     return p
 
 
@@ -65,6 +67,9 @@ def dispatch(db, a):
     if a.command == "refresh-cohort": return refresh_cohort(db, a.cohort_version, actor=a.actor, reason=a.reason)
     if a.command == "decide": return db.capture(a.entity_id, "decision", {"dataset_version": a.dataset_version, "selected_strain_versions": a.selected_strains, "rationale": a.rationale}, expected=a.expected, actor=a.actor, reason="explicit experimental selection")
     if a.command == "audit": return db.verify()
+    if a.command == "backup":
+        from .backup import backup
+        return backup(db, a.output)
     if a.command == "report":
         path = Path(a.output); path.write_text(render_report(db), encoding="utf-8")
         return {"report": str(path.resolve()), "audit_ok": db.verify()["ok"]}
@@ -74,6 +79,10 @@ def dispatch(db, a):
 def main(argv=None):
     a = parser().parse_args(argv)
     try:
+        if a.command == "restore":
+            from .backup import restore
+            print(json.dumps(restore(a.archive, a.destination), indent=2))
+            return 0
         if a.command == "demo":
             from .demo import run_demo
             result = run_demo(a.output)

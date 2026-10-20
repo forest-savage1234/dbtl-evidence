@@ -99,3 +99,10 @@ class CalculationTests(unittest.TestCase):
         newer = self.db.capture(m["entity_id"], "measurement", m["payload"], expected=m["id"], reason="QC review")
         with self.assertRaises(IntegrityError):
             self.db.capture("cohort:bad", "cohort", {"measurement_versions": [m["id"], newer["id"]]})
+
+    def test_equal_means_remain_tied_instead_of_inventing_a_unique_winner(self):
+        a = self.measurement()
+        parts = setup_assay(self.db, "B", protocol=self.parts["protocol"], extraction=self.parts["extraction"])
+        b = self.measurement(parts)
+        result = self.compare([a, b], min_biological_replicates=1)
+        self.assertEqual([s["rank"] for s in result["summaries"]], [1, 1])
