@@ -84,8 +84,10 @@ CREATE TRIGGER IF NOT EXISTS entities_no_delete BEFORE DELETE ON entities
 
 class Instrument:
     def __init__(self, root: str | Path):
+        from .storage import ObjectStore
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
+        self.objects = ObjectStore(self.root / "objects")
         self.conn = sqlite3.connect(self.root / "registry.sqlite", isolation_level=None,
                                     timeout=10)
         self.conn.row_factory = sqlite3.Row
@@ -180,6 +182,8 @@ class Instrument:
                 raise ConflictError("An entity cannot change kind")
             for dep in deps:
                 self.get(dep["version_id"])
+            for key in artifacts:
+                self.objects.verify(key)
             self.validate(kind, payload, deps, artifacts)
             record = {"id": "v_" + uuid4().hex, "entity_id": entity_id, "kind": kind,
                       "revision": previous["revision"] + 1 if previous else 1,
@@ -198,6 +202,7 @@ class Instrument:
 
     def verify(self) -> dict:
         errors = []
+        artifacts = set()
         check = self.conn.execute("PRAGMA quick_check").fetchone()[0]
         if check != "ok":
             errors.append(check)
@@ -206,7 +211,11 @@ class Instrument:
                 record = self.get(row[0])
                 for dep in record["dependencies"]:
                     self.get(dep["version_id"])
+                for key in record["artifacts"]:
+                    if key not in artifacts:
+                        self.objects.verify(key)
+                        artifacts.add(key)
             except (IntegrityError, KeyError, ValueError) as exc:
                 errors.append(str(exc))
         return {"ok": not errors, "version_count": self.conn.execute("SELECT count(*) FROM versions").fetchone()[0],
-                "errors": errors}
+                "artifact_count": len(artifacts), "errors": errors}
