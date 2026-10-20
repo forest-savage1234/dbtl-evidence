@@ -97,6 +97,8 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
         if high <= low:
             raise IntegrityError("Calibration response range must increase")
     if kind == "measurement":
+        from .ingest import verify_raw_binding
+        verify_raw_binding(db, entity_id, payload)
         identifier(text(payload, "analyte_id"))
         number(payload.get("response"), "response")
         if number(payload.get("dilution"), "dilution") <= 0:

@@ -23,10 +23,12 @@ def findings(db, *, include_acknowledged=False):
             if review and not include_acknowledged:
                 continue
             if old not in path_cache:
-                path_cache[old] = {x["record"]["id"]: x["path"] for x in impact(db, old)}
+                path_cache[old] = {x["record"]["id"]: x for x in impact(db, old)}
+            explanation = path_cache[old][target["id"]]
             result.append({"finding_id": key, "target_version": target["id"], "target_entity": target["entity_id"],
                            "target_kind": target["kind"], "source_old": old, "source_current": current,
-                           "source_entity": source["entity_id"], "path": path_cache[old][target["id"]],
+                           "source_entity": source["entity_id"], "path": explanation["path"],
+                           "path_complete": explanation["path_complete"], "total_steps": explanation["total_steps"],
                            "acknowledged": review is not None,
                            "disposition": review["payload"]["disposition"] if review else None,
                            "meaning": "Evidence changed; reassessment is required, not automatic rejection."})

@@ -65,8 +65,15 @@ class DatasetTests(unittest.TestCase):
 
     def test_excluded_candidate_remains_in_dependency_closure(self):
         from dbtl.graph import closure
-        members = {r["id"] for r in closure(self.db, self.dataset["id"])}
-        self.assertTrue(set(self.imported["measurement_versions"]) <= members)
+        path = Path(self.temp.name) / "excluded.csv"
+        base = write_csv(path, self.parts)
+        write_csv(path, self.parts, rows=[{**base, "measurement_id": "m:excluded", "technical_replicate_id": "tech:excluded", "qc": "fail"}])
+        excluded = ingest_csv(self.db, path)["measurement_versions"][0]
+        cohort = self.db.capture(self.cohort["entity_id"], "cohort", {"measurement_versions": self.imported["measurement_versions"] + [excluded]}, expected=self.cohort["id"], reason="explicit candidate expansion")
+        dataset = freeze(self.db, self.dataset["entity_id"], cohort["id"], self.policy["id"], expected=self.dataset["id"])
+        members = {r["id"] for r in closure(self.db, dataset["id"])}
+        self.assertIn(excluded, members)
+        self.assertEqual(dataset["payload"]["result"]["excluded"][0]["measurement_version"], excluded)
 
     def test_protocol_references_are_sealed_into_policy_graph(self):
         from dbtl.graph import closure

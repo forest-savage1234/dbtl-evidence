@@ -16,25 +16,38 @@ def closure(db, version_id, *, downstream=False):
     return [db.get(row[0]) for row in db.conn.execute(sql, (version_id, version_id))]
 
 
-def impact(db, source_version):
+def impact(db, source_version, *, max_path_steps=256):
     """Return one shortest explanation per reachable version; no duplicate alerts."""
+    if type(max_path_steps) is not int or max_path_steps < 1:
+        raise IntegrityError("Explanation path limit must be a positive integer")
     records = closure(db, source_version, downstream=True)
     wanted = {r["id"] for r in records}
     adjacency = {}
     for row in db.conn.execute("SELECT source_id, dependent_id, role FROM edges ORDER BY dependent_id,role"):
         if row["dependent_id"] in wanted:
             adjacency.setdefault(row["source_id"], []).append((row["dependent_id"], row["role"]))
-    paths = {source_version: []}
+    previous, depths = {source_version: None}, {source_version: 0}
     queue = deque([source_version])
     while queue:
         source = queue.popleft()
         for target, role in adjacency.get(source, []):
-            if target not in paths:
-                paths[target] = paths[source] + [{"source": source, "dependent": target, "role": role}]
+            if target not in previous:
+                previous[target] = (source, role)
+                depths[target] = depths[source] + 1
                 queue.append(target)
-    if set(paths) - {source_version} != wanted:
+    if set(previous) - {source_version} != wanted:
         raise IntegrityError("SQL reachability and path reconstruction disagree")
-    return [{"record": r, "path": paths[r["id"]]} for r in records]
+    result = []
+    for record in records:
+        target, path = record["id"], []
+        while previous[target] is not None and len(path) < max_path_steps:
+            source, role = previous[target]
+            path.append({"source": source, "dependent": target, "role": role})
+            target = source
+        result.append({"record": record, "path": list(reversed(path)),
+                       "path_complete": depths[record["id"]] <= max_path_steps,
+                       "total_steps": depths[record["id"]]})
+    return result
 
 
 def verify_closure(db, version_id):

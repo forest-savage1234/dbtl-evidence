@@ -1,6 +1,7 @@
 """Local CLI. No network listener, credentials, or external application writes."""
 import argparse
 import json
+import sqlite3
 from pathlib import Path
 import sys
 
@@ -28,7 +29,7 @@ def parser():
     q = commands.add_parser("cohort"); q.add_argument("entity_id"); q.add_argument("measurements", nargs="+"); q.add_argument("--expected"); q.add_argument("--reason", required=True)
     q = commands.add_parser("freeze"); q.add_argument("entity_id"); q.add_argument("cohort_version"); q.add_argument("policy_version"); q.add_argument("--expected"); q.add_argument("--reason", required=True)
     q = commands.add_parser("replay"); q.add_argument("dataset_version")
-    q = commands.add_parser("impact"); q.add_argument("version_id")
+    q = commands.add_parser("impact"); q.add_argument("version_id"); q.add_argument("--path-limit", type=int, default=256)
     q = commands.add_parser("reviews"); q.add_argument("--all", action="store_true")
     q = commands.add_parser("review"); q.add_argument("finding_id"); q.add_argument("--disposition", choices=["retain_historical", "retire"], required=True); q.add_argument("--note", required=True); q.add_argument("--reviewer", required=True)
     q = commands.add_parser("recalibrate"); q.add_argument("measurement_version"); q.add_argument("calibration_version"); q.add_argument("--reason", required=True)
@@ -44,6 +45,7 @@ def dispatch(db, a):
     if a.command == "init": return {"root": str(db.root), "schema": 1}
     if a.command == "capture":
         payload = json.loads(Path(a.json_file).read_text(encoding="utf-8"))
+        if not isinstance(payload, dict): raise IntegrityError("Capture payload must be a JSON object")
         extra = []
         for pair in a.dependency:
             if "=" not in pair: raise IntegrityError("Additional dependencies use role=version")
@@ -56,7 +58,7 @@ def dispatch(db, a):
     if a.command == "cohort": return db.capture(a.entity_id, "cohort", {"measurement_versions": a.measurements}, expected=a.expected, actor=a.actor, reason=a.reason)
     if a.command == "freeze": return freeze(db, a.entity_id, a.cohort_version, a.policy_version, expected=a.expected, actor=a.actor, reason=a.reason)
     if a.command == "replay": return replay(db, a.dataset_version)
-    if a.command == "impact": return impact(db, a.version_id)
+    if a.command == "impact": return impact(db, a.version_id, max_path_steps=a.path_limit)
     if a.command == "reviews": return findings(db, include_acknowledged=a.all)
     if a.command == "review": return acknowledge(db, a.finding_id, disposition=a.disposition, note=a.note, actor=a.reviewer)
     if a.command == "recalibrate": return recalibrate(db, a.measurement_version, a.calibration_version, actor=a.actor, reason=a.reason)
@@ -84,7 +86,7 @@ def main(argv=None):
             result = dispatch(db, a)
             print(json.dumps(result, indent=2))
             return 1 if isinstance(result, dict) and result.get("ok") is False else 0
-    except (IntegrityError, OSError, json.JSONDecodeError) as exc:
+    except (IntegrityError, OSError, json.JSONDecodeError, sqlite3.Error) as exc:
         print(json.dumps({"error": str(exc), "type": type(exc).__name__}), file=sys.stderr)
         return 2
 

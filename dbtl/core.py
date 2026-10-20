@@ -90,17 +90,33 @@ CREATE TRIGGER IF NOT EXISTS entities_no_delete BEFORE DELETE ON entities
 
 class Instrument:
     def __init__(self, root: str | Path):
+        if sqlite3.sqlite_version_info < (3, 38, 0):
+            raise IntegrityError("SQLite >=3.38 with JSON support is required")
         from .storage import ObjectStore
         self.root = Path(root).resolve()
         self.root.mkdir(parents=True, exist_ok=True)
+        database = self.root / "registry.sqlite"
+        existing = database.exists()
+        if existing:
+            try:
+                with sqlite3.connect(database.as_uri() + "?mode=ro", uri=True) as probe:
+                    metadata = probe.execute("SELECT value FROM metadata WHERE key='schema_version'").fetchone()
+                    if metadata is None or metadata[0] != "1":
+                        raise IntegrityError("Unsupported storage schema; refused before modifying it")
+                    tables = {r[0] for r in probe.execute("SELECT name FROM sqlite_master WHERE type='table'")}
+                    if not {"metadata", "versions", "entities"} <= tables:
+                        raise IntegrityError("Incomplete registry schema; refused before modifying it")
+            except sqlite3.Error as exc:
+                raise IntegrityError("Existing file is not a supported DBTL registry") from exc
         self.objects = ObjectStore(self.root / "objects")
-        self.conn = sqlite3.connect(self.root / "registry.sqlite", isolation_level=None,
+        self.conn = sqlite3.connect(database, isolation_level=None,
                                     timeout=10)
         self.conn.row_factory = sqlite3.Row
         self.conn.execute("PRAGMA foreign_keys=ON")
         self.conn.execute("PRAGMA journal_mode=WAL")
         self.conn.execute("PRAGMA synchronous=FULL")
-        self.conn.executescript(SCHEMA)
+        if not existing:
+            self.conn.executescript(SCHEMA)
         version = self.conn.execute("SELECT value FROM metadata WHERE key='schema_version'").fetchone()
         if version[0] != "1":
             self.conn.close()
@@ -213,6 +229,10 @@ class Instrument:
         return self.put(entity_id, kind, payload, dependencies=dependencies(kind, payload), **kwargs)
 
     def verify(self) -> dict:
+        from .audit import audit
+        return audit(self)
+
+    def _basic_verify(self) -> dict:
         errors = []
         artifacts = set()
         check = self.conn.execute("PRAGMA quick_check").fetchone()[0]

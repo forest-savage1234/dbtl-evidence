@@ -29,7 +29,7 @@ def render_report(db, *, title="DBTL evidence report"):
         sections.append("<h2>Correction review</h2><p>" + str(len(pending)) + " pending findings against current outputs. Acknowledgement records a human disposition; it does not make old evidence current.</p>")
         if queue:
             sections.append(table(["Output", "Changed source", "State", "Dependency steps"], [
-                [f["target_entity"], f["source_entity"], f["disposition"] or "needs review", len(f["path"])] for f in queue]))
+                [f["target_entity"], f["source_entity"], f["disposition"] or "needs review", f["total_steps"]] for f in queue]))
             for f in queue:
                 sections.append("<details><summary>" + e(f["target_entity"] + " ← " + f["source_entity"]) + "</summary><pre>" + e(json.dumps(f, indent=2)) + "</pre></details>")
         for dataset in db.versions("dataset"):

@@ -8,8 +8,7 @@ from .calc import evaluate, ALGORITHM_ID
 from .core import IntegrityError, digest
 from .graph import verify_closure, outdated_sources
 
-COMPUTATION_FILES = ["__init__.py", "core.py", "storage.py", "domain.py", "ingest.py",
-                     "graph.py", "calc.py", "datasets.py"]
+COMPUTATION_FILES = sorted(p.name for p in Path(__file__).parent.glob("*.py"))
 
 
 def source_manifest():
