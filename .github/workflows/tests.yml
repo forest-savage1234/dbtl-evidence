@@ -1,0 +1,29 @@
+name: Research software checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        python: ["3.11", "3.12", "3.13"]
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python }}
+      - name: Inspect runtime
+        run: python -c "import sys, sqlite3; print(sys.version); print(sqlite3.sqlite_version)"
+      - name: Run independent checks and workflow tests
+        run: python -m unittest discover -v
+      - name: Run synthetic correction demonstration
+        run: python -m dbtl demo --output "${RUNNER_TEMP}/dbtl-demonstration"

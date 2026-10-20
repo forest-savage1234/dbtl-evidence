@@ -8,8 +8,8 @@ import tempfile
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
-TOP = {"README.md", "SCOPE.md", "CHANGELOG.md", "pyproject.toml"}
-DIRECTORIES = {"dbtl", "tests", "tools", "docs", "evidence", "examples"}
+TOP = {"README.md", "SCOPE.md", "CHANGELOG.md", "pyproject.toml", "CITATION.cff"}
+DIRECTORIES = {"dbtl", "tests", "tools", "docs", "evidence", "examples", ".github"}
 
 
 def selected_files():

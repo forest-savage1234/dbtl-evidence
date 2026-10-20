@@ -1,5 +1,7 @@
 # DBTL Evidence Instrument · v1.0 research release
 
+Research software by **Forest Savage**.
+
 One local application for versioned product-titer comparisons and correction
 review. It coordinates a SQL registry, a content-addressed file store,
 dependency queries, numerical replay, and a readable offline report.
@@ -7,6 +9,23 @@ dependency queries, numerical replay, and a readable offline report.
 This release is a tested foundation for a specific assay workflow, **not a
 complete solution to metabolic-engineering data management or a laboratory-
 validated production platform**. Read [SCOPE.md](SCOPE.md) before using real data.
+
+## Complementary scientific instruments
+
+This project is maintained separately from Forest Savage's
+[Claim Review literature checker](https://github.com/forest-savage1234/casefile-provenance-demo/tree/main/claim-review)
+and the [ME2026 research records](https://github.com/forest-savage1234/metabolic-engineering-forensics).
+
+| Instrument | Main question | Evidence boundary |
+| --- | --- | --- |
+| [Claim Review](https://forest-savage1234.github.io/casefile-provenance-demo/claim-review/) | Can this published quantitative claim be reconstructed from the declared source data and calculation? | Source files, specified cells, numerical relationships, declared conditions, and unresolved support |
+| DBTL Evidence Instrument | Can this experimental comparison be reproduced, and which recorded outputs need reassessment when its supporting evidence changes? | Versioned samples, cultures, calibrations, measurements, comparison policies, datasets, and decisions |
+
+The projects have independent implementations and release histories. Their
+shared aim is stricter scientific data integrity. No live connector, shared
+database, or automatic transfer between the applications is implemented.
+The [companion-project design](docs/COMPANION_PROJECTS.md) describes a proposed
+evidence handoff and the checks needed before implementing it.
 
 ## Run immediately
 
@@ -93,6 +112,10 @@ The local Git tags are `v0.1`, `v0.2`, …, `v0.9`, `v1.0`. Each gate writes its
 test IDs, outcome, environment, and code hashes under `evidence/` before the
 corresponding commit. They are actual sequential implementations, not ten
 labels for one final code snapshot.
+
+Citation metadata are in [CITATION.cff](CITATION.cff). Licensing of this new
+project has not been selected; related projects and their dependencies retain
+their own existing license terms.
 
 If the source bundle contains `history.bundle`, recover the history with:
 
