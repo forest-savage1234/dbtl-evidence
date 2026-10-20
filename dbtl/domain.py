@@ -15,6 +15,10 @@ REFS = {
     "decision": {"dataset_version": ("dataset", "dataset")},
 }
 
+CONTEXT_FIELDS = frozenset({"medium", "temperature_c", "ph", "oxygenation", "vessel",
+                            "batch", "culture_protocol_version", "time_h", "compartment",
+                            "extraction_protocol_version"})
+
 
 def number(value, field="number") -> Decimal:
     if isinstance(value, bool) or not isinstance(value, (str, int)):
@@ -90,6 +94,8 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
             raise IntegrityError("Dilution must be positive")
         if payload.get("qc") not in {"pass", "fail", "unreviewed"}:
             raise IntegrityError("QC must be pass, fail, or unreviewed")
+        if payload.get("quantification") not in {"quantified", "below_loq", "above_uloq", "unreviewed"}:
+            raise IntegrityError("An explicit quantification status is required")
         for field in ("technical_replicate_id", "run_id"):
             identifier(text(payload, field))
         text(payload, "response_unit")
@@ -145,3 +151,23 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
             identities.add(record["entity_id"])
     if kind == "decision":
         text(payload, "rationale")
+    if kind == "policy":
+        if payload.get("metric") != "titer_g_l":
+            raise IntegrityError("Only product titer is implemented; yield/productivity need other denominators")
+        identifier(text(payload, "analyte_id"))
+        context = payload.get("context")
+        if not isinstance(context, dict) or set(context) != CONTEXT_FIELDS:
+            raise IntegrityError("Comparison policy must declare exactly the supported context fields")
+        for field in CONTEXT_FIELDS:
+            text(context, field)
+        for field in ("temperature_c", "ph", "time_h"):
+            number(context[field], field)
+        for field in ("culture_protocol_version", "extraction_protocol_version"):
+            if db.get(context[field])["kind"] != "protocol":
+                raise IntegrityError("Policy protocol references must identify exact protocol versions")
+        if type(payload.get("min_biological_replicates")) is not int or payload["min_biological_replicates"] < 1:
+            raise IntegrityError("Minimum biological replicate count must be a positive integer")
+        if payload.get("technical_aggregation") != "arithmetic_mean":
+            raise IntegrityError("Declare the supported technical aggregation explicitly")
+        if payload.get("genotype_requirement") not in {"any", "asserted_verified"}:
+            raise IntegrityError("Declare genotype eligibility explicitly")

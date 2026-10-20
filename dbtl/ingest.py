@@ -4,9 +4,9 @@ from pathlib import Path
 
 from .core import IntegrityError, digest, identifier
 
-ADAPTER_ID = "peak-area-csv:1"
+ADAPTER_ID = "peak-area-csv:2"
 FIELDS = ["measurement_id", "sample_version", "calibration_version", "analyte_id",
-          "response", "response_unit", "dilution", "qc", "technical_replicate_id", "run_id"]
+          "response", "response_unit", "dilution", "qc", "quantification", "technical_replicate_id", "run_id"]
 
 
 def ingest_csv(db, source, *, actor="local-operator", max_rows=100000):
