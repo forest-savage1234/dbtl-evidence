@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbtl-evidence"
+version = "2.0.0"
+description = "Local evidence reconstruction and correction review for DBTL data"
+requires-python = ">=3.11"
+dependencies = []
+authors = [{ name = "Forest Savage" }]
+
+[project.urls]
+Repository = "https://github.com/forest-savage1234/dbtl-evidence"
+"Companion literature checker" = "https://github.com/forest-savage1234/casefile-provenance-demo/tree/main/claim-review"
+"ME2026 research" = "https://github.com/forest-savage1234/metabolic-engineering-forensics"
+
+[project.scripts]
+dbtl = "dbtl.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["dbtl*"]

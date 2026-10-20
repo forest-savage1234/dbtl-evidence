@@ -1,0 +1,8 @@
+measurement_id,sample_version,calibration_version,analyte_id,response,response_unit,dilution,qc,quantification,technical_replicate_id,run_id
+demo:measurement-A1-1,v_6eb4910ca6f04de3b495ce079522f8ca,v_c0e6c096a8ca4d2db6957a1818f2a744,demo:product,1110,area,1,pass,quantified,tech:1,demo:run-1
+demo:measurement-A1-2,v_6eb4910ca6f04de3b495ce079522f8ca,v_c0e6c096a8ca4d2db6957a1818f2a744,demo:product,1310,area,1,pass,quantified,tech:2,demo:run-1
+demo:measurement-A1-3,v_6eb4910ca6f04de3b495ce079522f8ca,v_c0e6c096a8ca4d2db6957a1818f2a744,demo:product,9,area,1,pass,below_loq,tech:3,demo:run-1
+demo:measurement-A2-1,v_892cc29eea3d493abc5ab5ef1fb4fa75,v_c0e6c096a8ca4d2db6957a1818f2a744,demo:product,1210,area,1,pass,quantified,tech:1,demo:run-1
+demo:measurement-B1-1,v_a0f04f5a4385411f88fe07c21e3d809d,v_1e501fa9c3f64f47985ba81ce266a944,demo:product,1010,area,1,pass,quantified,tech:1,demo:run-1
+demo:measurement-B2-1,v_6c6766ce56e848b3a782281c0103142d,v_1e501fa9c3f64f47985ba81ce266a944,demo:product,1050,area,1,pass,quantified,tech:1,demo:run-1
+demo:measurement-C1-1,v_5a150a2768e34d19a84573b7007a161f,v_c0e6c096a8ca4d2db6957a1818f2a744,demo:product,2010,area,1,pass,quantified,tech:1,demo:run-1

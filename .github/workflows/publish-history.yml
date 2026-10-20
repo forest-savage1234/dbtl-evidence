@@ -1,0 +1,30 @@
+name: Preserve verified release history
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/publish-history.yml'
+      - 'evidence/github-history-publication.json'
+      - 'history.bundle'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dbtl-history-publication
+  cancel-in-progress: false
+
+jobs:
+  history:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+      - name: Verify and preserve the original release ancestry and tags
+        run: python3 tools/publish_history.py --publish

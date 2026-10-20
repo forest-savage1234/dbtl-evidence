@@ -1,0 +1,11 @@
+{
+  "schema": "scoped-genotype-calls/1",
+  "calls": [
+    {
+      "region_id": "region:1",
+      "expected": "synthetic-intended-state",
+      "observed": "synthetic-intended-state",
+      "status": "called"
+    }
+  ]
+}

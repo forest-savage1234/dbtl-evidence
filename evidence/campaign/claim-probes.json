@@ -1,0 +1,161 @@
+{
+  "snapshot_git_blob": "dc3cf7bb283d2e6eac5043be81325e5d231dd568",
+  "sha256": "89fd6fe7ebb04640abfbe50889e75fc803e21ee8cadafbdd72c7beb67d8fb874",
+  "runtime": "v24.19.0",
+  "results": [
+    {
+      "id": "CR-01",
+      "kind": "synthetic scope probe",
+      "reason": "Dimensions and headers allow product/biomass. Arithmetic is valid; a substrate-yield estimand is not established.",
+      "observed": {
+        "rounded": "0.50",
+        "numericalStatus": "SOURCE_REPLAY",
+        "overallStatus": "PARTIAL_SUPPORT",
+        "conditionStatus": "NOT_DECLARED",
+        "error": null,
+        "replicates": [],
+        "arithmeticDetail": "0.50 g/g at 2 decimal places."
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "CR-02",
+      "kind": "synthetic scope probe",
+      "reason": "Ratio of group means is 2.5. Mean of paired ratios is 2.0. The core explicitly warns it uses group means.",
+      "observed": {
+        "rounded": "2.50",
+        "numericalStatus": "SOURCE_REPLAY",
+        "overallStatus": "PARTIAL_SUPPORT",
+        "conditionStatus": "NOT_DECLARED",
+        "error": null,
+        "replicates": [
+          {
+            "input": 1,
+            "unit": "g",
+            "n": 2,
+            "cells": [
+              "A2",
+              "A3"
+            ],
+            "observations": [
+              "1",
+              "9"
+            ],
+            "ids": null,
+            "idCells": null,
+            "declaredReplicateType": "biological",
+            "mean": "5.000000000000",
+            "meanExact": "5/1",
+            "sampleVarianceExact": "32/1",
+            "sampleSD": "5.656854249492",
+            "SEM": "4.000000000000",
+            "summary": null,
+            "independence": "NOT_ESTABLISHED"
+          },
+          {
+            "input": 2,
+            "unit": "g",
+            "n": 2,
+            "cells": [
+              "B2",
+              "B3"
+            ],
+            "observations": [
+              "1",
+              "3"
+            ],
+            "ids": null,
+            "idCells": null,
+            "declaredReplicateType": "biological",
+            "mean": "2.000000000000",
+            "meanExact": "2/1",
+            "sampleVarianceExact": "2/1",
+            "sampleSD": "1.414213562373",
+            "SEM": "1.000000000000",
+            "summary": null,
+            "independence": "NOT_ESTABLISHED"
+          }
+        ],
+        "arithmeticDetail": "2.50 g/g at 2 decimal places. Operations combine group means; this is not a paired-ratio estimate and has no propagated uncertainty."
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "CR-03",
+      "kind": "synthetic scope probe",
+      "reason": "Three labels count as observations but do not establish three independent cultures. The report retains NOT_ESTABLISHED.",
+      "observed": {
+        "rounded": "1.00",
+        "numericalStatus": "SOURCE_REPLAY",
+        "overallStatus": "PARTIAL_SUPPORT",
+        "conditionStatus": "NOT_DECLARED",
+        "error": null,
+        "replicates": [
+          {
+            "input": 1,
+            "unit": "g/L",
+            "n": 3,
+            "cells": [
+              "B2",
+              "B3",
+              "B4"
+            ],
+            "observations": [
+              "1",
+              "1",
+              "1"
+            ],
+            "ids": [
+              "label1",
+              "label2",
+              "label3"
+            ],
+            "idCells": [
+              "A2",
+              "A3",
+              "A4"
+            ],
+            "declaredReplicateType": "biological",
+            "mean": "1.000000000000",
+            "meanExact": "1/1",
+            "sampleVarianceExact": "0/1",
+            "sampleSD": "0.000000000000",
+            "SEM": "0.000000000000",
+            "summary": null,
+            "independence": "NOT_ESTABLISHED"
+          }
+        ],
+        "arithmeticDetail": "1.00 g/L at 2 decimal places."
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "CR-04",
+      "kind": "synthetic scope probe",
+      "reason": "Positive control: declared source hash mismatch withholds arithmetic support.",
+      "observed": {
+        "rounded": null,
+        "numericalStatus": "WITHHELD",
+        "overallStatus": "REVIEW_REQUIRED",
+        "conditionStatus": "NOT_DECLARED",
+        "error": "Source fingerprint differs from the declared version",
+        "replicates": []
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "CR-05",
+      "kind": "synthetic scope probe",
+      "reason": "Positive control: incompatible dimensions withhold arithmetic support.",
+      "observed": {
+        "rounded": null,
+        "numericalStatus": "WITHHELD",
+        "overallStatus": "REVIEW_REQUIRED",
+        "conditionStatus": "NOT_DECLARED",
+        "error": "Calculated dimensions do not match the declared output unit",
+        "replicates": []
+      },
+      "expectation_met": true
+    }
+  ]
+}

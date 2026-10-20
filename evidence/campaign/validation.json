@@ -1,0 +1,32 @@
+{
+  "date": "2026-10-20",
+  "baseline_commit": "b99188386e8b0c60133b09f072b23cd57154b2be",
+  "production_modules_match_audited_git_baseline": true,
+  "reference_unittest": {
+    "command": "python3 -m unittest discover -q",
+    "tests_run": 69,
+    "result": "OK"
+  },
+  "dbtl_boundary_probes": 6,
+  "claim_boundary_probes": 5,
+  "all_probe_expectations_met": true,
+  "probe_interpretation": "Assertions of current scope, including known limitations; not repaired defects or biological validation.",
+  "claim_source_git_blob": "dc3cf7bb283d2e6eac5043be81325e5d231dd568",
+  "artifact_checks": [
+    "backlog dependencies acyclic",
+    "source references resolve",
+    "18 unique source IDs",
+    "18 proposed tasks",
+    "11 unique probes",
+    "no external HTML resources",
+    "HTML internal anchors resolve",
+    "production file fingerprints unchanged"
+  ],
+  "not_verified": [
+    "independent experimental reproduction",
+    "industrial efficacy",
+    "full JSON Schema metaschema validation",
+    "working application handoff",
+    "held-out comparative benchmark"
+  ]
+}

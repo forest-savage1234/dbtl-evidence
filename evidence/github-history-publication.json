@@ -1,0 +1,30 @@
+{
+  "schema": "dbtl-history-publication/1",
+  "repository": "forest-savage1234/dbtl-evidence",
+  "release_commit": "512d2c26804f61795a17c52330281727a2826848",
+  "bundle_sha256": "adb6eed1d078f48e22fb842eba5246f8b2c4939ee3f1e46f32395553492ae9f6",
+  "tags": {
+    "v0.1": "dd5b0e97b963bd7cd9585a2736f243705af98194",
+    "v0.2": "d2de34779295e261019a0c0dec5686409b25f3b6",
+    "v0.3": "04416a0e0fd738a728a0f3121db5accec38ff2bd",
+    "v0.4": "e1b0eb043342b95e73f0733463fed4db8f7ac080",
+    "v0.5": "1481177d63022dd79aa06ae8af075d416a840844",
+    "v0.6": "d583c2e6d7aca4a0db148c9626b40a63963289e5",
+    "v0.7": "57995fb2fe0389eed1c3bfc0720d419b27580bd2",
+    "v0.8": "d9b8c82bb42d87769107f2a4473ea8eeb1f513da",
+    "v0.9": "671c3260ae0ed5c46d78f2064123db49012d625f",
+    "v1.0": "b9c2e7053f1125530cda7fc9980d1ef93a97ed01",
+    "v1.1": "89be19946a49eda185e4e3e441507e7e0471addf",
+    "v1.2": "854bdd966bb2f1f83065cb232a0c984e16dd1df5",
+    "v1.3": "a724b3520df77173ec28ca1f964da46126fc31c3",
+    "v1.4": "b61772b7fcf93d455ed2581ca16cfa712fc2b8ea",
+    "v1.5": "d67be0beed9bb876a7c0307e15119b0c7337e4b3",
+    "v1.6": "fefa531c61fab2da08648e0b092e4ee5ae8d677f",
+    "v1.7": "12ac9224c781ecd2820647473eba42db6b4ec65a",
+    "v1.8": "717e5c4993173203adf3849f81ecddbf511928d8",
+    "v1.9": "16a77e9dd491af17f2bd5e28002b7c3bab334b8a",
+    "v2.0": "512d2c26804f61795a17c52330281727a2826848"
+  },
+  "archive_sha256": "a1aa5f4ec1e6af5ed06fe135e2713511add503e0262d9f7b56f54728d2156b3d",
+  "source_gate": "evidence/v2.0.json"
+}

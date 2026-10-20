@@ -1,0 +1,31 @@
+{
+  "schema": "linear-uncertainty/1",
+  "measurement_version": "v_1c86871a2ec943fc8a3e5f4ab09cda87",
+  "covariance": [
+    [
+      "4",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "0",
+      "1",
+      "0",
+      "0"
+    ],
+    [
+      "0",
+      "0",
+      "0",
+      "0"
+    ],
+    [
+      "0",
+      "0",
+      "0",
+      "0"
+    ]
+  ],
+  "basis": "SYNTHETIC supplied response/intercept variances; other effects unresolved, no confidence or significance claim."
+}

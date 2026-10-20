@@ -1,0 +1,238 @@
+{
+  "data": "SYNTHETIC ONLY",
+  "original": [
+    {
+      "biological_n": 2,
+      "cultures": [
+        {
+          "culture_id": "demo:culture-A1",
+          "mean_g_l": "0.6",
+          "technical_n": 2
+        },
+        {
+          "culture_id": "demo:culture-A2",
+          "mean_g_l": "0.6",
+          "technical_n": 1
+        }
+      ],
+      "eligible_for_descriptive_ranking": true,
+      "mean_g_l": "0.6",
+      "rank": 1,
+      "sample_sd_g_l": "0",
+      "strain_id": "demo:strain-A",
+      "strain_version": "v_d0b64d159de04aa5a0c507a41c47a853"
+    },
+    {
+      "biological_n": 2,
+      "cultures": [
+        {
+          "culture_id": "demo:culture-B1",
+          "mean_g_l": "0.5",
+          "technical_n": 1
+        },
+        {
+          "culture_id": "demo:culture-B2",
+          "mean_g_l": "0.52",
+          "technical_n": 1
+        }
+      ],
+      "eligible_for_descriptive_ranking": true,
+      "mean_g_l": "0.51",
+      "rank": 2,
+      "sample_sd_g_l": "0.014142135623730950488016887242096980785696718753769",
+      "strain_id": "demo:strain-B",
+      "strain_version": "v_bbf550d24c084db6a1a0fd34691a297f"
+    }
+  ],
+  "corrected": [
+    {
+      "biological_n": 2,
+      "cultures": [
+        {
+          "culture_id": "demo:culture-B1",
+          "mean_g_l": "0.5",
+          "technical_n": 1
+        },
+        {
+          "culture_id": "demo:culture-B2",
+          "mean_g_l": "0.52",
+          "technical_n": 1
+        }
+      ],
+      "eligible_for_descriptive_ranking": true,
+      "mean_g_l": "0.51",
+      "rank": 1,
+      "sample_sd_g_l": "0.014142135623730950488016887242096980785696718753769",
+      "strain_id": "demo:strain-B",
+      "strain_version": "v_bbf550d24c084db6a1a0fd34691a297f"
+    },
+    {
+      "biological_n": 2,
+      "cultures": [
+        {
+          "culture_id": "demo:culture-A1",
+          "mean_g_l": "0.3",
+          "technical_n": 2
+        },
+        {
+          "culture_id": "demo:culture-A2",
+          "mean_g_l": "0.3",
+          "technical_n": 1
+        }
+      ],
+      "eligible_for_descriptive_ranking": true,
+      "mean_g_l": "0.3",
+      "rank": 2,
+      "sample_sd_g_l": "0",
+      "strain_id": "demo:strain-A",
+      "strain_version": "v_d0b64d159de04aa5a0c507a41c47a853"
+    }
+  ],
+  "initial_review_findings": [
+    {
+      "finding_id": "818c7eedd5d27f05f6434b5c8e1362657ec1e7b9f3663f60622ac7f076405b0a",
+      "target_version": "v_9be7e6430f314a4daf44abf659690dba",
+      "target_entity": "demo:dataset",
+      "target_kind": "dataset",
+      "source_old": "v_c0e6c096a8ca4d2db6957a1818f2a744",
+      "source_current": "v_ab1adadccf0c4da39f25aa9cb3bb8492",
+      "source_entity": "demo:calibration-A",
+      "path": [
+        {
+          "source": "v_c0e6c096a8ca4d2db6957a1818f2a744",
+          "dependent": "v_23c784a8d5ed41cc9922e67e9a9bac69",
+          "role": "calibration"
+        },
+        {
+          "source": "v_23c784a8d5ed41cc9922e67e9a9bac69",
+          "dependent": "v_d78de9702f154dca8ba3bf859a1bb661",
+          "role": "candidate"
+        },
+        {
+          "source": "v_d78de9702f154dca8ba3bf859a1bb661",
+          "dependent": "v_9be7e6430f314a4daf44abf659690dba",
+          "role": "cohort"
+        }
+      ],
+      "path_complete": true,
+      "total_steps": 3,
+      "acknowledged": false,
+      "disposition": null,
+      "meaning": "Evidence changed; reassessment is required, not automatic rejection."
+    },
+    {
+      "finding_id": "323b79a178d8f3fa918fa9f4e54d6bdf99cbbad9ae8949e9656d7eac604ddcf4",
+      "target_version": "v_aac71f459d0240e58c906164bc1ff025",
+      "target_entity": "demo:decision",
+      "target_kind": "decision",
+      "source_old": "v_c0e6c096a8ca4d2db6957a1818f2a744",
+      "source_current": "v_ab1adadccf0c4da39f25aa9cb3bb8492",
+      "source_entity": "demo:calibration-A",
+      "path": [
+        {
+          "source": "v_c0e6c096a8ca4d2db6957a1818f2a744",
+          "dependent": "v_23c784a8d5ed41cc9922e67e9a9bac69",
+          "role": "calibration"
+        },
+        {
+          "source": "v_23c784a8d5ed41cc9922e67e9a9bac69",
+          "dependent": "v_d78de9702f154dca8ba3bf859a1bb661",
+          "role": "candidate"
+        },
+        {
+          "source": "v_d78de9702f154dca8ba3bf859a1bb661",
+          "dependent": "v_9be7e6430f314a4daf44abf659690dba",
+          "role": "cohort"
+        },
+        {
+          "source": "v_9be7e6430f314a4daf44abf659690dba",
+          "dependent": "v_aac71f459d0240e58c906164bc1ff025",
+          "role": "dataset"
+        }
+      ],
+      "path_complete": true,
+      "total_steps": 4,
+      "acknowledged": false,
+      "disposition": null,
+      "meaning": "Evidence changed; reassessment is required, not automatic rejection."
+    }
+  ],
+  "remaining_pending_findings": [],
+  "historical_replay": {
+    "ok": true,
+    "dataset_version": "v_9be7e6430f314a4daf44abf659690dba",
+    "result_sha256": "30926ad77f394ad5d7ab5e36fad709c9b5920ab2095f463a3fce2b599174d304",
+    "stale_inputs": [
+      {
+        "old": "v_9be7e6430f314a4daf44abf659690dba",
+        "current": "v_26f0d99f55844df58a0a54c7f84efe9d",
+        "entity_id": "demo:dataset"
+      },
+      {
+        "old": "v_23c784a8d5ed41cc9922e67e9a9bac69",
+        "current": "v_8aee7341151e48c9bb14ff4d6fe7c625",
+        "entity_id": "demo:measurement-A1-3"
+      },
+      {
+        "old": "v_406cf085f72145988dcb64c408fc420a",
+        "current": "v_c3c261875c60464dabbd86a86317af77",
+        "entity_id": "demo:measurement-C1-1"
+      },
+      {
+        "old": "v_49d897fbcc0c49139b98f2d846727ade",
+        "current": "v_a4928e1a1163457aadbf61fb9695e5b8",
+        "entity_id": "demo:measurement-A2-1"
+      },
+      {
+        "old": "v_4dff6803867a43c8ad6588a05d4f5f3f",
+        "current": "v_9485285f405440a9ad943b90f6e1dd29",
+        "entity_id": "demo:measurement-A1-1"
+      },
+      {
+        "old": "v_c0e6c096a8ca4d2db6957a1818f2a744",
+        "current": "v_ab1adadccf0c4da39f25aa9cb3bb8492",
+        "entity_id": "demo:calibration-A"
+      },
+      {
+        "old": "v_d78de9702f154dca8ba3bf859a1bb661",
+        "current": "v_84dc9e4184254c02b9b5e77b90f4a064",
+        "entity_id": "demo:cohort"
+      },
+      {
+        "old": "v_f9203374fe5b468189994513ff1294fc",
+        "current": "v_13ac2d10455641869221f6ee30dc7d40",
+        "entity_id": "demo:measurement-A1-2"
+      }
+    ],
+    "verified": {
+      "versions": 29,
+      "artifacts": 16
+    },
+    "meaning": "Historical numerical replay succeeded; scientific validity is not established."
+  },
+  "current_replay": {
+    "ok": true,
+    "dataset_version": "v_26f0d99f55844df58a0a54c7f84efe9d",
+    "result_sha256": "44121e1775a2ae8606ab2d2b1be2ab72c0562a367aaafde42455ba970452cb3f",
+    "stale_inputs": [],
+    "verified": {
+      "versions": 29,
+      "artifacts": 16
+    },
+    "meaning": "Historical numerical replay succeeded; scientific validity is not established."
+  },
+  "audit": {
+    "ok": true,
+    "meaning": "Local registry/byte consistency; not scientific validity or authenticated provenance",
+    "version_count": 41,
+    "artifact_count": 16,
+    "unreferenced_artifacts": 0,
+    "datasets_replayed": 2,
+    "datasets_replay_blocked": 0,
+    "warnings": [],
+    "errors": []
+  },
+  "original_dataset_version": "v_9be7e6430f314a4daf44abf659690dba",
+  "current_dataset_version": "v_26f0d99f55844df58a0a54c7f84efe9d",
+  "current_decision_version": "v_d96359ba0bd8460d9d9c14b77c06abae"
+}

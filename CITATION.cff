@@ -1,0 +1,11 @@
+cff-version: 1.2.0
+message: "Please cite this research software when using its implementation or methods, and cite the original studies separately for their scientific results."
+type: software
+title: "DBTL Evidence Instrument"
+version: "2.0.0"
+date-released: "2026-10-20"
+authors:
+  - family-names: Savage
+    given-names: Forest
+abstract: "A local research instrument for scoped decision packets, source-bound quantities, assessed experimental units, conditional assay uncertainty, process trajectories, historical reconstruction and evolving-evidence reassessment. Claim Review remains separate; literature receipts preserve unresolved scope. Evaluated on synthetic fixtures, without laboratory or industrial validation."
+repository-code: "https://github.com/forest-savage1234/dbtl-evidence"

@@ -1,0 +1,17 @@
+{
+  "scope": "Synthetic local single-process benchmark; no relative vendor or multiomics-scale claim",
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "graph_nodes": 2000,
+  "graph_insert_seconds": 0.18507622800098034,
+  "graph_reachability_seconds": 0.04422564799460815,
+  "reached_nodes": 1999,
+  "bounded_explanation_seconds": 0.08596616199793061,
+  "explained_nodes": 1999,
+  "csv_measurements": 1000,
+  "csv_bytes": 151922,
+  "csv_ingestion_seconds": 0.48608219099696726,
+  "audit_seconds": 0.10174691799329594,
+  "audit_ok": true
+}

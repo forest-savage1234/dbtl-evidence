@@ -1,0 +1,428 @@
+{
+  "schema": "campaign-backlog/1",
+  "date": "2026-10-20",
+  "status": "proposed; no external issues created",
+  "tasks": [
+    {
+      "id": "C00",
+      "priority": "P0",
+      "project": "both",
+      "title": "Freeze the decision problem and red-team corpus",
+      "depends_on": [],
+      "owner_role": "Research lead + independent domain reviewer",
+      "implementation": "Predeclare one target decision, adverse-error taxonomy, evidence-access tiers, adjudication rubric, and holdout split by original experiment family.",
+      "acceptance": "At least 12 diverse public cases are screened as a coverage pilot; every label is evidence-linked or unresolved; pilot is not an efficacy sample-size claim.",
+      "stop_condition": "Stop feature expansion if the recurring decision or usable evidence cannot be defined.",
+      "sources": [
+        "S01",
+        "S08",
+        "S10"
+      ],
+      "probes": [],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C01",
+      "priority": "P0",
+      "project": "both",
+      "title": "Specify separate assessment dimensions",
+      "depends_on": [
+        "C00"
+      ],
+      "owner_role": "Evidence engineer + analytical scientist",
+      "implementation": "Use independent arithmetic, assay, identity, independence, comparability, and version statuses. No combined verified label.",
+      "acceptance": "A valid replay with missing assay or context stays open in those dimensions in JSON, HTML, and exports.",
+      "stop_condition": "Block handoff if any status is silently upgraded or omitted.",
+      "sources": [
+        "S04",
+        "S10"
+      ],
+      "probes": [
+        "CR-01",
+        "CR-03"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C02",
+      "priority": "P0",
+      "project": "Claim Review",
+      "title": "Declare the estimand and denominator basis",
+      "depends_on": [
+        "C01"
+      ],
+      "owner_role": "Numerical methods engineer + domain reviewer",
+      "implementation": "Declare product/substrate/biomass identities, mass or carbon basis, feed consumed versus charged, volume basis, and time window.",
+      "acceptance": "Product/biomass may replay but cannot receive substrate-yield support; unknown feed or volume basis blocks the corresponding scientific assertion.",
+      "stop_condition": "Do not infer missing denominators from a dimensional unit.",
+      "sources": [
+        "S08",
+        "S10"
+      ],
+      "probes": [
+        "CR-01"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C03",
+      "priority": "P0",
+      "project": "Claim Review",
+      "title": "Expose paired and pooled estimators",
+      "depends_on": [
+        "C02"
+      ],
+      "owner_role": "Numerical methods engineer + statistician",
+      "implementation": "Add explicit paired mean-of-ratios versus ratio-of-sums/means modes with source-bound pair IDs and missingness policy.",
+      "acceptance": "Independent rational oracle gives 2.0 versus 2.5 on the seeded fixture; missing pair, duplicate pair, or zero denominator is explained and blocks unsupported pooling.",
+      "stop_condition": "Keep current bounded mode if pair provenance is unavailable.",
+      "sources": [
+        "S08"
+      ],
+      "probes": [
+        "CR-02"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C04",
+      "priority": "P0",
+      "project": "DBTL Evidence",
+      "title": "Register a versioned evidence pool and membership rule",
+      "depends_on": [
+        "C00",
+        "C01"
+      ],
+      "owner_role": "Data engineer + scientific curator",
+      "implementation": "Define pool boundary, analyte/assay scope, candidate predicate, missing-metadata handling, and monotone registry event watermark.",
+      "acceptance": "New matching evidence outside the old dependency closure creates a membership delta; nonmatching evidence does not; uncertain matching stays reviewable.",
+      "stop_condition": "Never describe a registry watermark as completeness of world literature.",
+      "sources": [
+        "S08",
+        "S14"
+      ],
+      "probes": [
+        "DE-03"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C05",
+      "priority": "P0",
+      "project": "DBTL Evidence",
+      "title": "Reassess additions, withdrawals, and eligibility changes",
+      "depends_on": [
+        "C04"
+      ],
+      "owner_role": "Data engineer + independent test reviewer",
+      "implementation": "Reassessment covers membership deltas, source revisions, changed policies, corrections, withdrawals and later-restored access where supported.",
+      "acceptance": "Independent set-difference oracle checks additions/removals; interrupted ingestion/restart cannot lose an event; old decision and replay remain unchanged.",
+      "stop_condition": "Block a current-for-pool claim if event coverage is unknown.",
+      "sources": [
+        "S11",
+        "S14"
+      ],
+      "probes": [
+        "DE-03",
+        "DE-06"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C06",
+      "priority": "P0",
+      "project": "DBTL Evidence",
+      "title": "Make genotype assertions explicitly scoped",
+      "depends_on": [
+        "C01"
+      ],
+      "owner_role": "Genomics scientist + evidence engineer",
+      "implementation": "Separate operator assertion from assessed observation; include material, time/generation, assay, covered region, population/clone, and limitations.",
+      "acceptance": "An arbitrary note remains an assertion and cannot satisfy an observed-genotype requirement; missing reads or limited assay coverage stays explicit.",
+      "stop_condition": "Do not certify the whole genotype from a partial check or attachment.",
+      "sources": [
+        "S03",
+        "S07",
+        "S09"
+      ],
+      "probes": [
+        "DE-01"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C07",
+      "priority": "P0",
+      "project": "both",
+      "title": "Represent experimental units and overlapping evidence",
+      "depends_on": [
+        "C01"
+      ],
+      "owner_role": "Statistician + curator",
+      "implementation": "Use experimental-unit IDs, sampling/aliquot/acquisition hierarchy, plate/run/batch blocks, shared inoculum and source-overlap declarations.",
+      "acceptance": "Renaming an aliquot does not increase independent n; common controls and reused literature data are not double-counted; unresolved identity blocks independence support.",
+      "stop_condition": "Distinct labels alone must never establish independence.",
+      "sources": [
+        "S08",
+        "S09",
+        "S17"
+      ],
+      "probes": [
+        "CR-03",
+        "DE-04"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C08",
+      "priority": "P1",
+      "project": "DBTL Evidence",
+      "title": "Add process trajectories and transfer scope",
+      "depends_on": [
+        "C01",
+        "C07"
+      ],
+      "owner_role": "Bioprocess scientist + data engineer",
+      "implementation": "Version setpoints and realized pH/DO/feed/volume trajectories; align instrument and sample clocks and preserve missing intervals.",
+      "acceptance": "Constant and oscillating profiles remain distinct despite matching nominal context; timezone drift and gaps produce explicit uncertainty.",
+      "stop_condition": "Do not automatically extrapolate strain rankings to a new regime or scale.",
+      "sources": [
+        "S01",
+        "S02",
+        "S18"
+      ],
+      "probes": [
+        "DE-02"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C09",
+      "priority": "P1",
+      "project": "both",
+      "title": "Attach assay validation and QC evidence",
+      "depends_on": [
+        "C01",
+        "C02"
+      ],
+      "owner_role": "Analytical chemist + adapter engineer",
+      "implementation": "Represent proxy/direct identity, standards, raw integration, internal standard, matrix/recovery, range, drift, and calibration fit evidence.",
+      "acceptance": "Proxy and direct assays cannot be equated by unit alone; supplied QC pass without supporting evidence remains an assertion; out-of-range/censored values stay visible.",
+      "stop_condition": "Do not build a universal mass-spectrometry validator; begin with one validated assay.",
+      "sources": [
+        "S04",
+        "S05",
+        "S10",
+        "S13"
+      ],
+      "probes": [
+        "CR-01"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C10",
+      "priority": "P1",
+      "project": "both",
+      "title": "Propagate uncertainty and preserve dependence",
+      "depends_on": [
+        "C03",
+        "C07",
+        "C09"
+      ],
+      "owner_role": "Metrologist/statistician + numerical engineer",
+      "implementation": "Represent calibration covariance, shared standards, replicate structure, dilution/volume contributions, censoring and missing uncertainty.",
+      "acceptance": "Independent analytical or simulation oracle checks propagation and common-mode cancellation; rank sensitivity is reported when magnitude is unidentified.",
+      "stop_condition": "Never substitute extra decimal places, sample SD, or SEM for total measurement uncertainty.",
+      "sources": [
+        "S04",
+        "S06"
+      ],
+      "probes": [
+        "CR-02"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C11",
+      "priority": "P0",
+      "project": "both",
+      "title": "Implement a bounded cross-project evidence handoff",
+      "depends_on": [
+        "C01",
+        "C02",
+        "C04"
+      ],
+      "owner_role": "Integration engineer + reviewer from each project",
+      "implementation": "Pin schema, producer code, source bytes, source locations, independent status dimensions, declared mappings, and intended use.",
+      "acceptance": "Round-trip unknown/open/conflict statuses without strengthening them; reject unknown schema, changed hash, invalid mapping, or scope mismatch.",
+      "stop_condition": "Import as literature evidence; never silently convert a publication result into a local wet-lab measurement.",
+      "sources": [
+        "S14",
+        "S15",
+        "S16"
+      ],
+      "probes": [
+        "CR-04",
+        "CR-05"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C12",
+      "priority": "P1",
+      "project": "both",
+      "title": "Classify corrections and prioritize review",
+      "depends_on": [
+        "C05",
+        "C11"
+      ],
+      "owner_role": "Scientific curator + UX engineer",
+      "implementation": "Classify numerical, methodological, identity, authorship and unknown deltas; retain rationale and unresolved cases.",
+      "acceptance": "The author-name correction fixture changes bibliographic metadata without claiming numeric invalidity; calibration corrections still reopen affected decisions.",
+      "stop_condition": "Do not auto-dismiss unclassified or consequential changes.",
+      "sources": [
+        "S11",
+        "S14"
+      ],
+      "probes": [
+        "DE-06"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C13",
+      "priority": "P0",
+      "project": "both",
+      "title": "Run blinded comparative task evaluation",
+      "depends_on": [
+        "C00",
+        "C03",
+        "C05",
+        "C06",
+        "C07",
+        "C11"
+      ],
+      "owner_role": "Independent evaluator + statistician",
+      "implementation": "Compare current workflow, configured existing platform, and platform plus this layer using matched tasks and balanced order.",
+      "acceptance": "Measure serious unsupported assertions, missed changes, useful coverage, false alerts, and total setup/curation/review time; report clustered confidence intervals.",
+      "stop_condition": "Reject standalone-product direction if an existing extension performs equivalently with less burden.",
+      "sources": [
+        "S06",
+        "S09",
+        "S14"
+      ],
+      "probes": [],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C14",
+      "priority": "P1",
+      "project": "DBTL Evidence",
+      "title": "Test reproducibility and recovery at measured workloads",
+      "depends_on": [
+        "C05"
+      ],
+      "owner_role": "Reliability engineer",
+      "implementation": "Define measured instrument workload, query mix, lineage depth/fan-out, object sizes, concurrency, privacy model, backup and restore objectives.",
+      "acceptance": "Restart/replay, raw-object corruption, partial writes, blocked access, event replay, and backpressure tests pass against fixed declared SLOs.",
+      "stop_condition": "Do not claim hundreds-of-millions-row scale from the existing small benchmark.",
+      "sources": [
+        "S14",
+        "S15"
+      ],
+      "probes": [
+        "DE-05",
+        "DE-06"
+      ],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C15",
+      "priority": "P2",
+      "project": "both",
+      "title": "Evaluate ML export and decision utility",
+      "depends_on": [
+        "C07",
+        "C08",
+        "C09",
+        "C10",
+        "C13"
+      ],
+      "owner_role": "ML scientist + independent evaluator",
+      "implementation": "Export provenance groups, uncertainty/missingness, frozen transformation versions, temporal holdouts and intended target domain.",
+      "acceptance": "Split by original experiment/lineage/batch/time; fit transforms on training only; compare simple baselines and calibration/OOD behavior; evaluate next-experiment value.",
+      "stop_condition": "Do not call traceable data ML-ready or add a recommendation engine without comparative benefit.",
+      "sources": [
+        "S06",
+        "S08",
+        "S12",
+        "S17"
+      ],
+      "probes": [],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C16",
+      "priority": "P1",
+      "project": "DBTL Evidence",
+      "title": "Validate with a laboratory and existing platform",
+      "depends_on": [
+        "C08",
+        "C09",
+        "C12",
+        "C13",
+        "C14"
+      ],
+      "owner_role": "Participating laboratory owner + quality reviewer",
+      "implementation": "Run a real acquisition-to-decision replay and a correction/new-evidence challenge using permitted data in the current ELN/LIMS.",
+      "acceptance": "An independent scientist can inspect exclusions and reproduce the bounded decision with preserved identities; measured burden meets the preregistered target.",
+      "stop_condition": "Industrial validation remains blocked until a partner and permissible data exist.",
+      "sources": [
+        "S01",
+        "S09",
+        "S10",
+        "S18"
+      ],
+      "probes": [],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    },
+    {
+      "id": "C17",
+      "priority": "P0",
+      "project": "both",
+      "title": "Publish an evidence-limited release assessment",
+      "depends_on": [
+        "C13",
+        "C16"
+      ],
+      "owner_role": "Maintainer + independent reviewer",
+      "implementation": "Publish scope, failures, access gaps, benchmark intervals, test identities, dependency versions and outstanding risks.",
+      "acceptance": "Every release claim maps to a completed gate and retained evidence; draft, local, external and industrial validation are distinguished.",
+      "stop_condition": "Do not promote the reference v1.0 tag into an industrial maturity claim.",
+      "sources": [
+        "S14"
+      ],
+      "probes": [],
+      "status": "proposed",
+      "effort": "Estimate after corpus and adapter discovery; no invented staffing or completion date."
+    }
+  ]
+}

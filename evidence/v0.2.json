@@ -1,0 +1,35 @@
+{
+  "release": "0.2",
+  "status": "passed",
+  "tests_run": 13,
+  "passed_tests": [
+    "tests.test_core.CoreTests.test_atomic_batch_rolls_back",
+    "tests.test_core.CoreTests.test_audit_finds_direct_tampering_after_trigger_removed",
+    "tests.test_core.CoreTests.test_clean_audit_and_kind_conflict",
+    "tests.test_core.CoreTests.test_multi_input_lineage_is_not_single_parent",
+    "tests.test_core.CoreTests.test_nan_and_mutated_python_inputs_do_not_change_stored_data",
+    "tests.test_core.CoreTests.test_revision_preserves_previous_and_requires_expected_head",
+    "tests.test_core.CoreTests.test_sql_write_cannot_overwrite_or_delete_history",
+    "tests.test_core.CoreTests.test_unknown_and_duplicate_dependencies_rejected",
+    "tests.test_storage.StorageTests.test_copy_is_exact_deduplicated_and_independent_of_source",
+    "tests.test_storage.StorageTests.test_corrupted_existing_object_is_not_silently_overwritten",
+    "tests.test_storage.StorageTests.test_missing_or_changed_evidence_fails_audit_and_registration",
+    "tests.test_storage.StorageTests.test_paths_and_symlinks_are_rejected",
+    "tests.test_storage.StorageTests.test_registered_artifact_audits_clean"
+  ],
+  "failures": [],
+  "skipped": [],
+  "elapsed_seconds": 0.1625263400055701,
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "source_hashes": {
+    "dbtl/__init__.py": "9216d1f4083a7979ef6e12b76cde594b5d0e3532531f4cfc2b25b32af00b87a7",
+    "dbtl/core.py": "70afde39412ff29a35aefd6ac1d9897e608adb8b21a099b7a43845f7146fb277",
+    "dbtl/storage.py": "127422ae066b87d039568aa19507227847b797beec72d6415edb06423f181025",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/test_core.py": "70419261b2e513418be065804a752944e0d183684185d9d15dfb74430fece1e6",
+    "tests/test_storage.py": "36a898e60f546922b3946c5b710089bc5e0ea85c63b77fc2a2eeb6b744e9210e",
+    "tools/release.py": "866fd4580e86c2cfb122a15f45dcce74df96a8132a2aba9e411a31c2c00e40ba"
+  }
+}

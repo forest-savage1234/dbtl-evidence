@@ -1,0 +1,88 @@
+{
+  "audited_baseline_commit": "b99188386e8b0c60133b09f072b23cd57154b2be",
+  "production_source_sha256": {
+    "dbtl/__init__.py": "508251b56af8c83271808bd744afef4028c71dfd4754d7a8862c7bd9927970c1",
+    "dbtl/__main__.py": "935a1c1166b0c1ea35a82256345000bf2c73ded718d77773bc27a71ecce28f7d",
+    "dbtl/audit.py": "b9b8daa2c1e6684b1f030078dfb8c0dc31ccbdab4089590225c16dbd00ca1732",
+    "dbtl/backup.py": "85c1fa2d74a837bea4197a82d4ec34c1da2f1b21b673d1892087b0bce467aabf",
+    "dbtl/calc.py": "204804864298f1e9d49e4e04d32de5454b265cf5939da3cdaf5dcb0566b27fd2",
+    "dbtl/cli.py": "ab80b8c29f4378a4bbbe56c966d718fabcae2f5f9e59077c394befedbfbbb0e0",
+    "dbtl/core.py": "3c46879439d87b80ff435817157dbe590512742d0472cf2980ca6d5a28fe1d99",
+    "dbtl/datasets.py": "c323d0fb82ff1dead46c76621d796b35550ccffa105517117022c265178d79ce",
+    "dbtl/demo.py": "59327ebf3422c4627c12d267690129556d9f4ef94597f4f6009152d7e7ad8362",
+    "dbtl/domain.py": "94d35f6fc5ebcb78070b6a2b13802941f71459c2dc9c154072c503be30f952b5",
+    "dbtl/graph.py": "f55a5c4d2ba55763286d9119e7a75da7b5e3627c06ca4010bf8598bb19ec2d8e",
+    "dbtl/ingest.py": "5d997477418b2e8918bda695cdb2f16888b97e1239455a13918f1de3dff04a06",
+    "dbtl/report.py": "5bd836a702d6ae779ccb5e774c8a1d7e7ab1986eda6809f0c9e53f622973459d",
+    "dbtl/review.py": "d74db0386a601824df9655fbdd1d3aa587181f3269531fc669797fc4b5ffd463",
+    "dbtl/storage.py": "127422ae066b87d039568aa19507227847b797beec72d6415edb06423f181025"
+  },
+  "python": "3.12.14",
+  "results": [
+    {
+      "id": "DE-01",
+      "kind": "synthetic scope probe",
+      "reason": "Any retained artifact satisfies asserted_verified; artifact content is not genotype verification.",
+      "observed": {
+        "asserted_verified_accepted": true,
+        "included_measurements": 1
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "DE-02",
+      "kind": "synthetic scope probe",
+      "reason": "Distinct trajectory extensions are retained but ignored by the ten-field comparison policy.",
+      "observed": {
+        "included_measurements": 2,
+        "biological_n": 2,
+        "different_trajectory_extensions_pooled": true
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "DE-03",
+      "kind": "synthetic scope probe",
+      "reason": "New independent eligible evidence outside the frozen cohort does not trigger reassessment.",
+      "observed": {
+        "pending_before": 0,
+        "pending_after_new_evidence": 0,
+        "new_evidence_in_frozen_cohort": false
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "DE-04",
+      "kind": "synthetic scope probe",
+      "reason": "Distinct culture entity labels are counted separately even when an extension declares a shared physical origin.",
+      "observed": {
+        "declared_shared_physical_origin": true,
+        "reported_biological_n": 2,
+        "rank": 1
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "DE-05",
+      "kind": "synthetic scope probe",
+      "reason": "Positive control: a supported context mismatch is explicitly excluded.",
+      "observed": {
+        "included": 1,
+        "excluded": 1,
+        "reasons": [
+          "context_mismatch:batch"
+        ]
+      },
+      "expectation_met": true
+    },
+    {
+      "id": "DE-06",
+      "kind": "synthetic scope probe",
+      "reason": "Positive control: a changed dependency blocks a new current comparison.",
+      "observed": {
+        "current_comparison_blocked": true
+      },
+      "expectation_met": true
+    }
+  ]
+}
