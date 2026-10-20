@@ -44,7 +44,7 @@ def identifier(value: str) -> str:
 
 KINDS = frozenset({"design", "strain", "activity", "protocol", "culture", "sample",
                    "calibration", "measurement", "import", "cohort", "policy",
-                   "dataset", "decision", "review", "model"})
+                   "dataset", "decision", "review", "model", "assessment"})
 
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS metadata(key TEXT PRIMARY KEY, value TEXT NOT NULL);

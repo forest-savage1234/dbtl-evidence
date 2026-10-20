@@ -27,8 +27,17 @@ class Result(unittest.TextTestResult):
 
 def main():
     version = sys.argv[1]
-    if not re.fullmatch(r"(?:0\.[1-9]|1\.0)", version):
-        raise SystemExit("Use 0.1 through 1.0")
+    if not re.fullmatch(r"(?:0\.[1-9]|1\.[0-9]|2\.0)", version):
+        raise SystemExit("Use 0.1 through 2.0")
+    if subprocess.run(["git", "rev-parse", "--verify", "refs/tags/v"+version], cwd=ROOT, capture_output=True).returncode == 0:
+        raise SystemExit("Refuse to overwrite an existing release")
+    if version.startswith("1.") and version != "1.0" or version == "2.0":
+        previous = "1.9" if version == "2.0" else "1."+str(int(version.split(".")[1])-1)
+        subprocess.run(["git", "merge-base", "--is-ancestor", "v"+previous, "HEAD"], cwd=ROOT, check=True)
+        scope = ROOT / "docs/releases" / ("v"+version+".md")
+        if not scope.is_file() or not all(s in scope.read_text() for s in ["Scope", "Challenges", "Limits"]):
+            raise SystemExit("Release needs scope, integrity challenges and explicit limits")
+    subprocess.run(["git", "diff", "--check"], cwd=ROOT, check=True)
     (ROOT / "dbtl/__init__.py").write_text(
         '"""Local DBTL evidence instrument; see SCOPE.md."""\n__version__ = "' + version + '.0"\n')
     config = ROOT / "pyproject.toml"

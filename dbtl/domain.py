@@ -46,6 +46,9 @@ def text(payload, field):
 
 
 def dependencies(kind: str, payload: dict) -> list[dict]:
+    if kind == "assessment":
+        from .assessments import assessment_dependencies
+        return assessment_dependencies(payload)
     result = [{"role": role, "version_id": payload[field]}
               for field, (role, _) in REFS.get(kind, {}).items() if field in payload]
     if kind == "cohort":
@@ -60,6 +63,9 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
 
 
 def validate(db, kind, payload, deps, artifacts, entity_id):
+    if kind == "assessment":
+        from .assessments import validate_assessment
+        validate_assessment(db, payload, deps, artifacts)
     pairs = {(d["role"], d["version_id"]) for d in deps}
     for field, (role, required_kind) in REFS.get(kind, {}).items():
         version_id = payload.get(field)
