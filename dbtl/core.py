@@ -62,6 +62,12 @@ CREATE TABLE IF NOT EXISTS versions(
     UNIQUE(entity_id, revision)
 );
 CREATE INDEX IF NOT EXISTS versions_entity ON versions(entity_id, revision DESC);
+CREATE INDEX IF NOT EXISTS measurement_acquisition ON versions(
+ json_extract(record,'$.payload.sample_version'),
+ json_extract(record,'$.payload.analyte_id'),
+ json_extract(record,'$.payload.run_id'),
+ json_extract(record,'$.payload.technical_replicate_id')
+) WHERE json_extract(record,'$.kind')='measurement';
 CREATE VIEW IF NOT EXISTS heads AS
  SELECT v.* FROM versions v
  WHERE NOT EXISTS (SELECT 1 FROM versions n
@@ -184,7 +190,7 @@ class Instrument:
                 self.get(dep["version_id"])
             for key in artifacts:
                 self.objects.verify(key)
-            self.validate(kind, payload, deps, artifacts)
+            self.validate(kind, payload, deps, artifacts, entity_id)
             record = {"id": "v_" + uuid4().hex, "entity_id": entity_id, "kind": kind,
                       "revision": previous["revision"] + 1 if previous else 1,
                       "previous_id": previous["id"] if previous else None,
@@ -197,9 +203,9 @@ class Instrument:
                                canonical(record), digest(record)))
             return json.loads(canonical(record))
 
-    def validate(self, kind: str, payload: dict, deps: list[dict], artifacts: list[str]):
+    def validate(self, kind: str, payload: dict, deps: list[dict], artifacts: list[str], entity_id: str):
         from .domain import validate
-        validate(self, kind, payload, deps, artifacts)
+        validate(self, kind, payload, deps, artifacts, entity_id)
 
     def capture(self, entity_id: str, kind: str, payload: dict, **kwargs) -> dict:
         """Populate known typed references without inferring biological metadata."""

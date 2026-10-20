@@ -46,7 +46,7 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
     return result
 
 
-def validate(db, kind, payload, deps, artifacts):
+def validate(db, kind, payload, deps, artifacts, entity_id):
     pairs = {(d["role"], d["version_id"]) for d in deps}
     for field, (role, required_kind) in REFS.get(kind, {}).items():
         version_id = payload.get(field)
@@ -96,6 +96,36 @@ def validate(db, kind, payload, deps, artifacts):
         calibration = db.get(payload["calibration_version"])["payload"]
         if (payload["analyte_id"], payload["response_unit"]) != (calibration["analyte_id"], calibration["response_unit"]):
             raise IntegrityError("Measurement and calibration analyte/unit mismatch")
+        sample_entity = db.get(payload["sample_version"])["entity_id"]
+        duplicate = db.conn.execute("""
+            SELECT entity_id FROM versions
+            WHERE json_extract(record,'$.kind')='measurement'
+              AND json_extract(record,'$.payload.sample_version') IN
+                  (SELECT id FROM versions WHERE entity_id=?)
+              AND json_extract(record,'$.payload.analyte_id')=?
+              AND json_extract(record,'$.payload.run_id')=?
+              AND json_extract(record,'$.payload.technical_replicate_id')=?
+              AND entity_id<>? LIMIT 1
+            """, (sample_entity, payload["analyte_id"], payload["run_id"],
+                  payload["technical_replicate_id"], entity_id)).fetchone()
+        if duplicate:
+            raise IntegrityError("Acquisition identity already belongs to another measurement entity")
+    if kind == "activity":
+        text(payload, "operation")
+        allowed = {"recipient": {"strain"}, "donor": {"strain", "design"},
+                   "vector": {"design"}, "protocol": {"protocol"}, "evidence": set()}
+        recipients = [d for d in deps if d["role"] == "recipient"]
+        if len(recipients) != 1:
+            raise IntegrityError("A construction activity must declare exactly one recipient strain")
+        for d in deps:
+            if d["role"] not in allowed:
+                raise IntegrityError("Unknown construction input role")
+            if allowed[d["role"]] and db.get(d["version_id"])["kind"] not in allowed[d["role"]]:
+                raise IntegrityError("Construction input has the wrong biological role")
+    if kind == "strain":
+        for d in deps:
+            if d["role"] == "built_by" and db.get(d["version_id"])["kind"] != "activity":
+                raise IntegrityError("built_by must reference a construction activity")
     if kind == "import":
         for field in ("adapter_id", "adapter_sha256", "source_digest", "source_name"):
             text(payload, field)

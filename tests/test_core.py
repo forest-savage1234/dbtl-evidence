@@ -27,9 +27,9 @@ class CoreTests(unittest.TestCase):
             self.db.put("design:A", "design", {}, expected=old["id"])
 
     def test_multi_input_lineage_is_not_single_parent(self):
-        a = self.db.put("design:A", "design", {})
+        a = self.db.put("strain:A", "strain", {})
         b = self.db.put("design:B", "design", {})
-        activity = self.db.put("activity:1", "activity", {}, dependencies=[
+        activity = self.db.put("activity:1", "activity", {"operation": "synthetic fixture"}, dependencies=[
             {"role": "recipient", "version_id": a["id"]},
             {"role": "donor", "version_id": b["id"]}])
         self.assertEqual(len(activity["dependencies"]), 2)

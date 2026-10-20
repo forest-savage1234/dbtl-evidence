@@ -40,12 +40,6 @@ def ingest_csv(db, source, *, actor="local-operator", max_rows=100000):
                     if key in seen:
                         raise IntegrityError(f"CSV row {index}: duplicate technical acquisition identity")
                     seen.add(key)
-                    # The same acquisition cannot be relabeled and imported again.
-                    for old in db.conn.execute("SELECT record FROM heads h JOIN entities e ON e.id=h.entity_id WHERE e.kind='measurement'"):
-                        import json
-                        p = json.loads(old[0])["payload"]
-                        if key == tuple(p[k] for k in ("sample_version", "analyte_id", "run_id", "technical_replicate_id")):
-                            raise IntegrityError("Acquisition identity already registered; use an explicit revision")
                     row["import_version"] = imported["id"]
                     row["source_row"] = index + 1
                     measurement = db.capture(measurement_id, "measurement", row, actor=actor)
