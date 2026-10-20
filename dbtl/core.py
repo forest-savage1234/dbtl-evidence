@@ -198,7 +198,13 @@ class Instrument:
             return json.loads(canonical(record))
 
     def validate(self, kind: str, payload: dict, deps: list[dict], artifacts: list[str]):
-        """Domain contracts are added by the ingestion release."""
+        from .domain import validate
+        validate(self, kind, payload, deps, artifacts)
+
+    def capture(self, entity_id: str, kind: str, payload: dict, **kwargs) -> dict:
+        """Populate known typed references without inferring biological metadata."""
+        from .domain import dependencies
+        return self.put(entity_id, kind, payload, dependencies=dependencies(kind, payload), **kwargs)
 
     def verify(self) -> dict:
         errors = []

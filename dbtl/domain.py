@@ -1,0 +1,117 @@
+"""Small versioned contracts; absent scientific context is never invented."""
+from decimal import Decimal, InvalidOperation
+import re
+
+from .core import IntegrityError, identifier
+
+
+REFS = {
+    "culture": {"strain_version": ("strain", "strain"), "protocol_version": ("protocol", "protocol")},
+    "sample": {"culture_version": ("culture", "culture"),
+               "extraction_protocol_version": ("extraction_protocol", "protocol")},
+    "measurement": {"sample_version": ("sample", "sample"),
+                    "calibration_version": ("calibration", "calibration"),
+                    "import_version": ("raw", "import")},
+    "decision": {"dataset_version": ("dataset", "dataset")},
+}
+
+
+def number(value, field="number") -> Decimal:
+    if isinstance(value, bool) or not isinstance(value, (str, int)):
+        raise IntegrityError(f"{field}: supply a decimal string or integer, never a float")
+    text = str(value)
+    if len(text) > 128 or not re.fullmatch(r"[+-]?(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][+-]?\d+)?", text):
+        raise IntegrityError(f"{field}: invalid finite decimal")
+    try:
+        value = Decimal(text)
+    except InvalidOperation as exc:
+        raise IntegrityError(f"{field}: invalid decimal") from exc
+    if not value.is_finite() or abs(value.as_tuple().exponent) > 300 or abs(value.adjusted()) > 300:
+        raise IntegrityError(f"{field}: decimal magnitude is outside the supported range")
+    return value
+
+
+def text(payload, field):
+    value = payload.get(field)
+    if not isinstance(value, str) or not value.strip():
+        raise IntegrityError(f"{field}: nonempty text required")
+    return value
+
+
+def dependencies(kind: str, payload: dict) -> list[dict]:
+    result = [{"role": role, "version_id": payload[field]}
+              for field, (role, _) in REFS.get(kind, {}).items() if field in payload]
+    if kind == "cohort":
+        result += [{"role": "candidate", "version_id": v} for v in payload.get("measurement_versions", [])]
+    return result
+
+
+def validate(db, kind, payload, deps, artifacts):
+    pairs = {(d["role"], d["version_id"]) for d in deps}
+    for field, (role, required_kind) in REFS.get(kind, {}).items():
+        version_id = payload.get(field)
+        if not isinstance(version_id, str) or (role, version_id) not in pairs:
+            raise IntegrityError(f"{kind}.{field}: exact typed dependency required")
+        if db.get(version_id)["kind"] != required_kind:
+            raise IntegrityError(f"{kind}.{field}: requires {required_kind}")
+    if "extensions" in payload:
+        if not isinstance(payload["extensions"], dict) or any(":" not in k for k in payload["extensions"]):
+            raise IntegrityError("Extension keys must be namespaced, e.g. lab:editor")
+    if kind == "strain":
+        if payload.get("genotype_status", "unverified") not in {"unverified", "asserted_verified"}:
+            raise IntegrityError("Genotype verification is an operator assertion")
+        if payload.get("genotype_status") == "asserted_verified" and not artifacts:
+            raise IntegrityError("An asserted verified genotype needs an evidence artifact")
+    if kind == "culture":
+        for field in ("temperature_c", "ph"):
+            if field in payload:
+                value = number(payload[field], field)
+                if field == "ph" and not 0 <= value <= 14:
+                    raise IntegrityError("pH outside supported range 0–14")
+    if kind == "sample" and "time_h" in payload and number(payload["time_h"], "time_h") < 0:
+        raise IntegrityError("Sampling time must be nonnegative")
+    if kind == "calibration":
+        identifier(text(payload, "analyte_id"))
+        if text(payload, "response_unit") != "area":
+            raise IntegrityError("v1 adapter supports integrated peak area only")
+        if text(payload, "concentration_unit") not in {"g/L", "mg/L", "ug/L"}:
+            raise IntegrityError("Unsupported concentration unit")
+        if number(payload.get("slope"), "slope") <= 0:
+            raise IntegrityError("Calibration slope must be positive")
+        number(payload.get("intercept"), "intercept")
+        low = number(payload.get("min_response"), "min_response")
+        high = number(payload.get("max_response"), "max_response")
+        if high <= low:
+            raise IntegrityError("Calibration response range must increase")
+    if kind == "measurement":
+        identifier(text(payload, "analyte_id"))
+        number(payload.get("response"), "response")
+        if number(payload.get("dilution"), "dilution") <= 0:
+            raise IntegrityError("Dilution must be positive")
+        if payload.get("qc") not in {"pass", "fail", "unreviewed"}:
+            raise IntegrityError("QC must be pass, fail, or unreviewed")
+        for field in ("technical_replicate_id", "run_id"):
+            identifier(text(payload, field))
+        text(payload, "response_unit")
+        calibration = db.get(payload["calibration_version"])["payload"]
+        if (payload["analyte_id"], payload["response_unit"]) != (calibration["analyte_id"], calibration["response_unit"]):
+            raise IntegrityError("Measurement and calibration analyte/unit mismatch")
+    if kind == "import":
+        for field in ("adapter_id", "adapter_sha256", "source_digest", "source_name"):
+            text(payload, field)
+        if payload["source_digest"] not in artifacts or payload["adapter_sha256"] not in artifacts:
+            raise IntegrityError("Raw bytes and adapter source must both be retained")
+    if kind == "cohort":
+        values = payload.get("measurement_versions")
+        if not isinstance(values, list) or not values or len(values) != len(set(values)):
+            raise IntegrityError("Cohort must declare nonempty, unique measurement versions")
+        identities = set()
+        for v in values:
+            record = db.get(v)
+            if record["kind"] != "measurement" or ("candidate", v) not in pairs:
+                raise IntegrityError("Cohort requires typed measurement dependencies")
+            if record["entity_id"] in identities:
+                raise IntegrityError("A cohort cannot include two revisions of the same measurement")
+            identities.add(record["entity_id"])
+    if kind == "decision":
+        text(payload, "rationale")
