@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "dbtl-evidence"
+version = "0.1.0"
+description = "Local evidence reconstruction and correction review for DBTL data"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+dbtl = "dbtl.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["dbtl*"]

@@ -1,0 +1,28 @@
+{
+  "release": "0.1",
+  "status": "passed",
+  "tests_run": 8,
+  "passed_tests": [
+    "tests.test_core.CoreTests.test_atomic_batch_rolls_back",
+    "tests.test_core.CoreTests.test_audit_finds_direct_tampering_after_trigger_removed",
+    "tests.test_core.CoreTests.test_clean_audit_and_kind_conflict",
+    "tests.test_core.CoreTests.test_multi_input_lineage_is_not_single_parent",
+    "tests.test_core.CoreTests.test_nan_and_mutated_python_inputs_do_not_change_stored_data",
+    "tests.test_core.CoreTests.test_revision_preserves_previous_and_requires_expected_head",
+    "tests.test_core.CoreTests.test_sql_write_cannot_overwrite_or_delete_history",
+    "tests.test_core.CoreTests.test_unknown_and_duplicate_dependencies_rejected"
+  ],
+  "failures": [],
+  "skipped": [],
+  "elapsed_seconds": 0.269688494001457,
+  "python": "3.12.14",
+  "sqlite": "3.53.1",
+  "platform": "Linux-6.18.55-x86_64-with-glibc2.39",
+  "source_hashes": {
+    "dbtl/__init__.py": "e66ba8ad56bacc518571a906b2b97878b004c24b62ff8f2c512c85141a79f970",
+    "dbtl/core.py": "55df6f1675a9f7688ecb946eaa9a51f15f5a10e8e766241a4e41dc67caae37fd",
+    "tests/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "tests/test_core.py": "70419261b2e513418be065804a752944e0d183684185d9d15dfb74430fece1e6",
+    "tools/release.py": "866fd4580e86c2cfb122a15f45dcce74df96a8132a2aba9e411a31c2c00e40ba"
+  }
+}
