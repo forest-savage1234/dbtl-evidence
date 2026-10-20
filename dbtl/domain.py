@@ -13,6 +13,7 @@ REFS = {
                     "calibration_version": ("calibration", "calibration"),
                     "import_version": ("raw", "import")},
     "decision": {"dataset_version": ("dataset", "dataset")},
+    "dataset": {"cohort_version": ("cohort", "cohort"), "policy_version": ("policy", "policy")},
 }
 
 CONTEXT_FIELDS = frozenset({"medium", "temperature_c", "ph", "oxygenation", "vessel",
@@ -47,6 +48,12 @@ def dependencies(kind: str, payload: dict) -> list[dict]:
               for field, (role, _) in REFS.get(kind, {}).items() if field in payload]
     if kind == "cohort":
         result += [{"role": "candidate", "version_id": v} for v in payload.get("measurement_versions", [])]
+    if kind == "policy":
+        context = payload.get("context", {})
+        if isinstance(context, dict):
+            result += [{"role": role, "version_id": context[field]} for field, role in
+                       [("culture_protocol_version", "culture_protocol"), ("extraction_protocol_version", "extraction_protocol")]
+                       if field in context]
     return result
 
 
@@ -165,9 +172,15 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
         for field in ("culture_protocol_version", "extraction_protocol_version"):
             if db.get(context[field])["kind"] != "protocol":
                 raise IntegrityError("Policy protocol references must identify exact protocol versions")
+            role = "culture_protocol" if field == "culture_protocol_version" else "extraction_protocol"
+            if (role, context[field]) not in pairs:
+                raise IntegrityError("Policy context references must be dependencies")
         if type(payload.get("min_biological_replicates")) is not int or payload["min_biological_replicates"] < 1:
             raise IntegrityError("Minimum biological replicate count must be a positive integer")
         if payload.get("technical_aggregation") != "arithmetic_mean":
             raise IntegrityError("Declare the supported technical aggregation explicitly")
         if payload.get("genotype_requirement") not in {"any", "asserted_verified"}:
             raise IntegrityError("Declare genotype eligibility explicitly")
+    if kind == "dataset":
+        from .datasets import validate_dataset
+        validate_dataset(db, payload, artifacts)
