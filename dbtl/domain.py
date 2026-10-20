@@ -14,6 +14,8 @@ REFS = {
                     "import_version": ("raw", "import")},
     "decision": {"dataset_version": ("dataset", "dataset")},
     "dataset": {"cohort_version": ("cohort", "cohort"), "policy_version": ("policy", "policy")},
+    "review": {"target_version": ("review_target", None), "source_old": ("source_old", None),
+               "source_current": ("source_current", None)},
 }
 
 CONTEXT_FIELDS = frozenset({"medium", "temperature_c", "ph", "oxygenation", "vessel",
@@ -63,7 +65,7 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
         version_id = payload.get(field)
         if not isinstance(version_id, str) or (role, version_id) not in pairs:
             raise IntegrityError(f"{kind}.{field}: exact typed dependency required")
-        if db.get(version_id)["kind"] != required_kind:
+        if required_kind is not None and db.get(version_id)["kind"] != required_kind:
             raise IntegrityError(f"{kind}.{field}: requires {required_kind}")
     if "extensions" in payload:
         if not isinstance(payload["extensions"], dict) or any(":" not in k for k in payload["extensions"]):
@@ -158,6 +160,16 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
             identities.add(record["entity_id"])
     if kind == "decision":
         text(payload, "rationale")
+        from .datasets import replay
+        from .graph import outdated_sources
+        replay(db, payload["dataset_version"])
+        if outdated_sources(db, payload["dataset_version"]):
+            raise IntegrityError("A new decision cannot silently reuse superseded evidence")
+        selected = payload.get("selected_strain_versions")
+        eligible = {s["strain_version"] for s in db.get(payload["dataset_version"])["payload"]["result"]["summaries"]
+                    if s["eligible_for_descriptive_ranking"]}
+        if not isinstance(selected, list) or not selected or len(selected) != len(set(selected)) or not set(selected) <= eligible:
+            raise IntegrityError("Selected strains must be unique, eligible members of the declared dataset")
     if kind == "policy":
         if payload.get("metric") != "titer_g_l":
             raise IntegrityError("Only product titer is implemented; yield/productivity need other denominators")
@@ -184,3 +196,6 @@ def validate(db, kind, payload, deps, artifacts, entity_id):
     if kind == "dataset":
         from .datasets import validate_dataset
         validate_dataset(db, payload, artifacts)
+    if kind == "review":
+        from .review import validate_review
+        validate_review(db, payload)
